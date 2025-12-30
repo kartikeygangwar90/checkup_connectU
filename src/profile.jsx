@@ -164,7 +164,7 @@ function ProfileSetup() {
     const [step, setStep] = React.useState(1);
 
     const nextStep = () => {
-        if (step < 4) setStep(step + 1);
+        if (step < 5) setStep(step + 1);
 
     };
     const prevStep = () => {
@@ -173,9 +173,8 @@ function ProfileSetup() {
 
     const [userData, setUserData] = React.useState({
         fullName: "",
-        gender: "",
         roll: "",
-        description: "",
+        bio: "",
         college: "",
         course: "",
         branch: "",
@@ -183,56 +182,72 @@ function ProfileSetup() {
         technicalSkills: [],
         softSkills: [],
         interests: [],
+        generalInterest: [],
         experience: "",
-        email: "",
+        nitpemail: "",
+        pemail: "",
         phone: "",
         availability: ""
     })
 
-    const [skillInput, setSkillInput] = React.useState("");
-    const [skills, setSkills] = React.useState([]);
-    const [clicked, setClicked] = React.useState([]);
-    function addSkills(skill, val) {
-        setClicked([...clicked, val]);
-        if (!skill.trim()) return;
-        if (skills.includes(skill)) return;
-        
-        setSkills([...skills, skill]);
-        
-        const selected = userData.technicalSkills.includes(skill);
-        
-        setUserData({
-            ...userData,
-            technicalSkills: selected ? userData.technicalSkills.filter(i => i !== skill) : [...userData.technicalSkills, skill]
-        })
-        setSkillInput("")
-    }
+    // Logic for step 2 starts here ------------------>
     
-    const [softSkillInput, setSoftSkillInput] = React.useState("");
-    const [softSkills, setSoftSkills] = React.useState([]);
-    const [softClicked, setSoftClicked] = React.useState([])
-    function addSoftSkills(skill, val) {
-        setSoftClicked([...softClicked, val])
+//  for Technical skills ---------------------------->
+    const [skillInput, setSkillInput] = React.useState("");
+    const techSkills = ["React js", "Node JS", " UI / Ux Developer", "Robotics"]
+    const toggleTechSkills = (skill) => {
         if (!skill.trim()) return;
-        if (softSkills.includes(skill)) return;
-
-        setSoftSkills([...softSkills, skill]);
-
-        const selected = userData.softSkills.includes(skill);
-
-        setUserData({
-            ...userData,
-            softSkills: selected ? userData.softSkills.filter(i => i !== skill) : [...userData.softSkills, skill]
+        setUserData((prev) => {
+            if(!prev.technicalSkills.includes(skill) && prev.technicalSkills.length >=10) return prev;
+            return{
+            ...prev, technicalSkills : prev.technicalSkills.includes(skill) ? prev.technicalSkills.filter((i) => i !== skill) : [...prev.technicalSkills, skill]
+            }
         })
+        setSkillInput("");
+    }
+//   for Soft Skills ---------------------------->
+    const [softSkillInput, setSoftSkillInput] = React.useState("");
+    const softSkills = ["Leadership", "Problem Solving", "Critical Thinking", "Team work"]
+    const toggleSoftSklls = (skill) => {
+        if(!skill) return;
+        setUserData((prev) => {
+            if(!prev.softSkills.includes(skill) && prev.softSkills.length >=10) return prev;
+            return {
+            ...prev, softSkills : prev.softSkills.includes(skill) ? prev.softSkills.filter((i) => i !== skill) : [...prev.softSkills, skill]
+            }
+        }
+        )
         setSoftSkillInput("")
     }
-    const [experience, setExperience] = React.useState("")
-    const [expClicked, setExpClicked] = React.useState(0)
-    function addExperience (exp, value) {
-        if (!exp.trim()) return;
-        setExperience(exp)
-        setExpClicked(value)
+//  For Experience level of user ------------------------------->
+    const experience = ["Beginner", "Intermediate", "Advanced", "Expert"]
+    const toggleExperience = (level) => {
+        setUserData((prev) => ({
+            ...prev,
+            experience : prev.experience === level ? "" : level
+        })
+    )
     }
+    // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ 
+//  Logic for step 3 starts here --------------------------------->
+
+// for Interest of user -------------------------->
+    const mainInterest = ["Web Development", "Data Science", "AI / Ml", "Game development", "Social Impact", "App Decelopment", "E-Commerce", "Sports", "Health Tech"]
+    const toggleMainInterest = (interest) => {
+        setUserData((prev) => ({
+            ...prev, interests: prev.interests.includes(interest) ? prev.interests.filter((i) => i !== interest) : [...prev.interests, interest]
+        }))
+    }
+// for General interests also ------------------------------------>
+    const interests = ["Startups", "Research", "Open Source", "Competition", "Hackathon", "Freelancing", "Learning New Tech"];
+    const toggleGeneralInterest = (interest) => {
+        setUserData((prev) => ({
+            ...prev, generalInterest: prev.generalInterest.includes(interest) ? prev.generalInterest.filter((i) => i !== interest) : [...prev.generalInterest, interest]
+        })
+        )
+    }
+    //  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     return (
         <main>
@@ -241,28 +256,28 @@ function ProfileSetup() {
                 <p>Join the community and find your perfect team</p>
 
                 <div className="boxes">
-                    <div className="box">
-                        <div className="circle">1</div>
+                    <div className = "box">
+                        <div className={`circle ${step === 1 ? "onStep" : ""}  ${step > 1 ? "passedStep" : ""}`}><span>{step === 1 ? "1" : "✔"}</span></div>
                         <h4>Personal Info</h4>
                         <p className="render">Tell us about yourself</p>
                     </div>
-                    <div className="box">
-                        <div className="circle">2</div>
+                    <div className = "box">
+                        <div className={`circle ${step === 2 ? "onStep" : ""}  ${step > 2 ? "passedStep" : ""}`}><span>{step === 2 ? "1" : "✔"}</span></div>
                         <h4>Skills</h4>
                         <p className="render">what are you good at ?</p>
                     </div>
-                    <div className="box">
-                        <div className="circle">3</div>
+                    <div className = "box">
+                        <div className={`circle ${step === 3 ? "onStep" : ""}  ${step > 3 ? "passedStep" : ""}`}><span>{step === 3 ? "1" : "✔"}</span></div>
                         <h4>Interests</h4>
                         <p className="render">What drives you ?</p>
                     </div>
                     <div className="box">
-                        <div className="circle">4</div>
+                        <div className={`circle ${step === 4 ? "onStep" : ""}  ${step > 4 ? "passedStep" : ""}`}><span>{step === 4 ? "1" : "✔"}</span></div>
                         <h4>Contact Info</h4>
                         <p className="render">How can we reach you ?</p>
                     </div>
-                    <div className="box">
-                        <div className="circle">5</div>
+                    <div className = "box">
+                        <div className={`circle ${step === 2 ? "onStep" : ""}`}>5</div>
                         <h4>Review</h4>
                         <p className="render">Almost done</p>
                     </div>
@@ -279,13 +294,13 @@ function ProfileSetup() {
                         value={userData.value}
                         onChange={(e) => setUserData({ ...userData, fullName: e.target.value })}
                     />
-                    <h5 className="email--heading">Email Address <span className="required">*</span></h5>
+                    <h5 className="email--heading">NITP Email <span className="required">*</span></h5>
                     <input
                         type="text"
                         className="email--input"
-                        placeholder="your.email@gmail.com"
+                        placeholder="nitp email id"
                         value={userData.value}
-                        onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                        onChange={(e) => setUserData({ ...userData, nitpemail: e.target.value })}
                     />
                     <h5 className="college--input">University <span className="required">*</span></h5>
                     <select
@@ -321,23 +336,42 @@ function ProfileSetup() {
                         className="bio--input"
                         placeholder="Tell us a bit about yourself... (optional)"
                         value={userData.value}
-                        onChange={(e) => setUserData({ ...userData, description: e.target.value })}
+                        onChange={(e) => setUserData({ ...userData, bio: e.target.value })}
                     />
-                    <button id="prev" className='previous' onClick={prevStep} disabled={step === 1} >Previous</button>
-                    <button id="nextt" className={`next ${step === 4 ? "preview-active" : ""}`} onClick={step === 4 ? Preview : nextStep} >{step === 4 ? "Preview" : "next"}</button>
+                    <button 
+                    id="prev"
+                     className={`previous ${step === 1 ? "disabled" : ""}`}
+                      onClick={prevStep}
+                       disabled={step === 1} 
+                       >
+                        Previous</button>
+                    <button
+                     id="nextt"
+                      className={`next ${step === 4 ? "preview-active" : ""} ${ (!userData.fullName || userData.nitpemail === "" || userData.college === "" || userData.year === "" || userData.branch === "") ? "disabled" : ""}`} 
+                      onClick={step === 4 ? Preview : nextStep} 
+                      disabled = {!userData.fullName || userData.nitpemail === "" || userData.college === "" || userData.year === "" || userData.branch === ""}
+                      >
+                        {step === 4 ? "Preview" : "next"}
+                      </button>
                 </div>
                 }
+
                 {step === 2 && <div className="skills--info--p">
                     <h3 class="head-tag skills">Your Skills</h3>
                     <p class="tag skills">Let others discover what you bring to a team</p>
                     <h4 className="technical--heading">Technical Skills <span className="required">*</span></h4>
                     <p className="tag">Add skills you can Confidently contribute</p>
-                    <button className={`suggestion ${ clicked.includes(1) ? "suggestion--clicked" : ""}`} onClick={() => addSkills("React JS", 1)}>React JS &gt;</button>
-                    <button className={`suggestion ${ clicked.includes(2) ? "suggestion--clicked" : ""}`} onClick={() => addSkills("Node.Js", 2) }>Node.js &gt;</button>
-                    <button className={`suggestion ${ clicked.includes(3) ? "suggestion--clicked" : ""}`} onClick={() => addSkills("UI/UX Designer", 3)}>UI/UX Designer &gt;</button>
-                    <button className={`suggestion ${ clicked.includes(4) ? "suggestion--clicked" : ""}`} onClick={() => addSkills("Machine learning", 4)}>Machine Learning &gt;</button>
-                    <button className={`suggestion ${ clicked.includes(5) ? "suggestion--clicked" : ""}`} onClick={() => addSkills("Marketing", 5)}>Marketing &gt;</button>
-                    <button className={`suggestion ${ clicked.includes(6) ? "suggestion--clicked" : ""}`} onClick={() => addSkills("Robotics", 6)}>Robotics &gt;</button>
+                    {
+                        techSkills.map((skill) => (
+                            <button
+                            key={skill}
+                            className={`suggestion ${userData.technicalSkills.includes(skill) ? "suggestion--clicked" : ""}`}
+                            onClick={() => toggleTechSkills(skill)}
+                            >
+                                {skill}
+                            </button>
+                        ))
+                    }
                     <div className="skill--input--area">
                         <input
                             type="text"
@@ -348,60 +382,190 @@ function ProfileSetup() {
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") {
                                     e.preventDefault();
-                                    addSkills(skillInput);
+                                    
+                                    const skill = skillInput.trim();
+                                    if(!skill) return;
+
+                                    toggleTechSkills(skill)
                                     setSkillInput("");
                                 }
                             }}
                         />
-                        <button className="add--skill" onClick={() => addSkills(skillInput)}>Add</button>
+                        <button className="add--skill" onClick={() => toggleTechSkills(skillInput)}>Add</button>
                     </div>
                     <div className="skill-choosen">
-                        {skills.map((skill, index) => (
-                            <h3 className="skills" key={index}>{skill}</h3>
+                        {userData.technicalSkills.map((skill) => (
+                            <span
+                            key={skill}
+                             className="skills"
+                              onClick={() => toggleTechSkills(skill)}
+                              >
+                                {skill} ✕
+                            </span>
                         ))}
                     </div>
                     <h4 className="technical--heading">Soft Skills <span className="required">*</span></h4>
                     <p className="tag">Talent that you have</p>
-                    <button className={`suggestion--softskill ${softClicked.includes(1) ? "suggestion--clicked" : ""}`} onClick={() => addSoftSkills("Leadership", 1)}>Leadership &gt;</button>
-                    <button className={`suggestion--softskill ${softClicked.includes(2) ? "suggestion--clicked" : ""}`} onClick={() => addSoftSkills("Problem solving", 2)}>Problem solving &gt;</button>
-                    <button className={`suggestion--softskill ${softClicked.includes(3) ? "suggestion--clicked" : ""}`} onClick={() => addSoftSkills("Team work", 3)}>Team work &gt;</button>
-                    <button className={`suggestion--softskill ${softClicked.includes(4) ? "suggestion--clicked" : ""}`} onClick={() => addSoftSkills("Critical Thinking", 4)}>Critical Thinking &gt;</button>
+                    {
+                        softSkills.map((skill) => (
+                            <button
+                            key={skill}
+                            className={`suggestion--softskill ${userData.softSkills.includes(skill) ? "suggestion--clicked" : ""}`}
+                            onClick={() => toggleSoftSklls(skill)}
+                            >
+                                {skill} ✕
+                            </button>
+                        ))
+                    }
                     <div className="softSkill--input--area">
-                    <input
-                        type="text"
-                        className="softSkill--input"
-                        placeholder="Add custom Soft skills ..."
-                        value={softSkillInput}
-                        onChange={(e) => setSoftSkillInput(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                e.preventDefault();
-                                addSoftSkills(softSkillInput);
-                                setSoftSkillInput("");
-                            }
-                        }}
-                    />
-                    <button className="add--skill" onClick={() => addSoftSkills(softSkillInput)}>Add</button>
+                        <input
+                            type="text"
+                            className="softSkill--input"
+                            placeholder="Add custom Soft skills ..."
+                            value={softSkillInput}
+                            onChange={(e) => setSoftSkillInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault();
+
+                                    const skill = softSkillInput.trim();
+                                    if(!skill) return;
+
+                                    toggleSoftSklls(skill)
+                                    setSoftSkillInput("");
+                                }
+                            }}
+                        />
+                        <button className="add--skill" onClick={() => toggleSoftSklls(softSkillInput)}>Add</button>
                     </div>
                     <div className="skill-choosen">
-                        {softSkills.map((skill, index) => (
-                            <h3 className="skills" key={index}>{skill}</h3>
+                        {
+                        userData.softSkills.map((skill, index) => (
+                            <span
+                            key={index}
+                             className="skills"
+                             onClick={() => toggleSoftSklls(skill)}
+                              >
+                                {skill} ✕
+                              </span>
                         ))}
                     </div>
                     <h4 className="technical--heading">Experience Level <span className="required">*</span></h4>
                     <div className="exp--boxes">
-                        <button className={`exp--box ${expClicked === 1 ? "clicked--exp" : ""}`} onClick={() => addExperience("Beginner", 1)}>Beginner</button>
-                        <button className={`exp--box ${expClicked === 2 ? "clicked--exp" : ""}`} onClick={() => addExperience("Intermediate", 2)}>Intermediate</button>
-                        <button className={`exp--box ${expClicked === 3 ? "clicked--exp" : ""}`} onClick={() => addExperience("Advanced", 3)}>Advanced</button>
-                        <button className={`exp--box ${expClicked === 4 ? "clicked--exp" : ""}`} onClick={() => addExperience("Expert", 4)}>Expert</button>
+                        {
+                            experience.map((exp) => (
+                                <button
+                                key={exp}
+                                className={`exp--box ${userData.experience.includes(exp) ? "clicked--exp" : ""}`}
+                                onClick={() => toggleExperience(exp)}
+                                >
+                                    {exp}
+                                </button>
+                            ))
+                        }
                     </div>
-                    <button className='previous' onClick={prevStep} disabled={step === 1} >Previous</button>
-                    <button className={`next ${step === 4 ? "preview-active" : ""}`} onClick={step === 4 ? Preview : nextStep} >{step === 4 ? "Preview" : "next"}</button>
-
+                    <div className="btns--change">
+                        <button
+                         id="prev2"
+                          className='previous' 
+                          onClick={prevStep} 
+                          disabled={step === 1}
+                          >
+                            Previous</button>
+                        <button
+                         id="next2" 
+                         className={`next ${step === 4 ? "preview-active" : ""} ${(userData.technicalSkills.length === 0 || userData.softSkills.length === 0 || userData.experience === "") ? "disabled" : ""}
+                          >`}
+                          onClick={step === 4 ? Preview : nextStep} 
+                          disabled = {userData.technicalSkills.length === 0 || userData.softSkills.length === 0 || userData.experience === ""}
+                          >
+                            {step === 4 ? "Preview" : "next"}</button>
+                    </div>
                 </div>
-
                 }
 
+                {step === 3 && <div className="interest--info--p">
+                    <h3 className="head-tag">Your Interest</h3>
+                    <p class="tag skills">Let others discover what you bring to a team</p>
+                    <h4 className="technical--heading">Project Types you are interested in <span className="required">*</span></h4>
+                    <div className="interest--boxes">
+                        {
+                            mainInterest.map((interest) => (
+                                <button
+                                key={interest}
+                                className={`box--interest ${userData.interests.includes(interest) ? "interest--choosen" : ""}`}
+                                onClick={() => toggleMainInterest(interest)}
+                                >
+                                    {interest}
+                                </button>
+                            ))
+                        }
+                    </div>
+                    <h4 id="tech--head" className="technical--heading">General Interests <span className="required">*</span></h4>
+                    <p class="tag skills">What else are you passionate about ?</p>
+                    <div className="general--interest--boxes">
+                        {
+                            interests.map((interest) => (
+                                <button
+                                key={interest}
+                                className={`general--interest ${userData.generalInterest.includes(interest) ? "gen--interest--choosen" : ""}`}
+                                onClick={() => toggleGeneralInterest(interest)}
+                                >
+                                    {interest}
+                                </button>
+                            ))
+                        }
+                    </div>
+                    <div className="btns--change">
+                        <button
+                         id="prev3"
+                          className='previous'
+                           onClick={prevStep}
+                            disabled={step === 1} >Previous</button>
+                        <button
+                         id="next3"
+                          className={`next ${step === 4 ? "preview-active" : ""} ${(userData.interests.length === 0 || userData.generalInterest.length === 0) ? "disabled" : ""}`}
+                           onClick={step === 4 ? Preview : nextStep} 
+                           disabled = {userData.interests.length === 0 || userData.generalInterest.length === 0}
+                           >
+                            {step === 4 ? "Preview" : "next"}
+                           </button>
+                    </div>
+                </div>
+                }
+
+                {step === 4 && <div className="contact--info--p">
+                    <h3 className="head-tag">Contact Info</h3>
+                    <p class="tag skills">How can we reach you out ?</p>
+                    <h4 className="technical--heading">Roll number <span className="required">*</span></h4>
+                    <input
+                        type="number"
+                        placeholder="Enter Roll Number"
+                        className="contact--input"
+                    />
+                    <h4 className="technical--heading"> Active Email Id<span className="required">*</span></h4>
+                    <input
+                        type="text"
+                        placeholder="Enter Personal Email Id"
+                        className="contact--input"
+                    />
+                    <h4 className="technical--heading"> Active Phone Number<span className="required">*</span></h4>
+                    <input
+                        type="number"
+                        placeholder="Enter Active Phone Number"
+                        className="contact--input"
+                    />
+                    <div className="last--buttons">
+                        <button id="prev4" className='previous' onClick={prevStep}>previous</button>
+                        <button id="preview" className= {`next ${step === 4 ? "preview--active" : ""}`} onClick={nextStep}>Preview</button>
+                    </div>
+                </div>
+                }
+                
+                {step === 5 && <div className="preview--page--p">
+                    <h3>{...userData}</h3>
+                </div>
+                }
             </div>
         </main>
     )
