@@ -7,6 +7,7 @@ import Access from "./access";
 import Profile from "./profile";
 import PrivateRoute from "./privateRoute";
 import Policy from "./Terms&Conditions";
+import Home from "./home";
 
 reactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -33,13 +34,10 @@ reactDOM.createRoot(document.getElementById("root")).render(
             path="/policy"
             element={<Policy />}
           />
-          {/* <Route 
-          path="/navbar"
-          element = {<Navbar />}
-          /> */}
-          {/* <Route path='/home' element = {<Home />} />
-          <Route path='/about' element = {<About />} />
-          <Route path='/contact' element = {<Contact />} /> */}
+          <Route
+          path="/home"
+          element = {<Home />}
+          />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

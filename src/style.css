@@ -400,7 +400,7 @@
 .complete--page--p .next:hover{
     background-color: violet;
     color: #111827;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 @media (max-width: 900px) {
@@ -617,6 +617,7 @@
     cursor: pointer;
     background-color: blue;
     color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 
 }
 
@@ -642,8 +643,8 @@
 .skills--info--p .exp--boxes .clicked--exp {
     background-color: rgba(173, 111, 230, 0.564);
     color: black;
-    font-size: large;
-    font-weight: bold;
+    font-size: 1.3rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .skills--info--p .btns--change {
@@ -662,6 +663,9 @@
 
 
 @media (max-width: 768px) {
+    .skills--info--p {
+        width: 90%;
+    }
     .skills--info--p .exp--boxes .exp--box {
         width: fit-content;
         flex-wrap: wrap;
@@ -747,11 +751,13 @@
     background-color: blueviolet;
     color: white;
     font-size: 1.1rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .interest--info--p .interest--boxes .interest--choosen{
     background-color: blueviolet;
     color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 1.1rem;
 }
 
@@ -775,6 +781,12 @@
 .interest--info--p #next3 {
     width: 40%;
     height: 40px;
+}
+
+@media (max-width : 768px) {
+    .interest--info--p {
+        width: 90%;
+    }
 }
 
 .contact--info--p {
@@ -826,10 +838,241 @@
     width: 40%;
     height: 40px;
 }
-.contact--info--p #preview{
+
+.contact--info--p .available {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+}
+
+.contact--info--p .availability--heading{
+    margin: 10px auto 5px 5px;
+}
+
+.contact--info--p #later--option{
+    margin: 0px  auto 10px auto;
+}
+.contact--info--p .available .avail{
+    width: 30%;
+    padding: 10px;
+    margin: 0px auto auto 10px;
+    border: 1px solid greenyellow;
+    background-color: #acd2ed;
+    cursor: pointer;
+}
+.contact--info--p .available .avail:hover{
+    background-color: blue;
+    color: white;
+}
+.contact--info--p .available .avail.avail--choosen{
+    background-color: blueviolet;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 1.2rem;
+}
+
+.contact--info--p .next.disabled{
+    background-color: #c7cfd5;
+    color: #111827;
+    width: 40%;
+    height: 40px;
+}
+
+.contact--info--p .next.preview--active{
     width: 40%;
     height: 40px;
     color: white;
     background-color: rgba(17, 163, 17, 0.826);
 }
 
+@media (max-width : 768px) {
+    .contact--info--p{
+        width: 90%;
+    }
+}
+
+.preview--page--p{
+    width: 70%;
+    max-width: 900px;
+    height: fit-content;
+    padding: 20px;
+    border: 1px solid gray;
+    box-sizing: border-box;
+    box-shadow: 1px 2px 1px 1px gray;
+    justify-self: center;
+    text-align: start;
+    text-indent: 4px;
+    align-self: center;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    justify-items: center;
+}
+
+.preview--page--p .completion-icon {
+    width: 100%;
+    animation: scaleIn 0.4s ease-out;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.preview--page--p .head-tag{
+    color: blue;
+    font-family: "Times New Roman", Times, serif;
+    font-size: larger;
+    margin: 0px;
+    width: 100%;
+}
+.preview--page--p .tag{
+    margin: 5px auto 0px auto;
+}
+.preview--page--p .skills{
+    margin: 5px;
+}
+
+.preview--page--p .section{
+    width: 85%;
+    height: fit-content;
+    text-align: start;
+    border-radius: 20px;
+    padding: 0px 0px 10px 10px;
+    margin: 5px auto 10px auto;
+}
+.preview--page--p .section--1{
+    background-color: rgba(229, 145, 229, 0.686);
+}
+
+.preview--page--p .section .section--info{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 20px;
+    padding: 10px;
+    padding-bottom: 0px;
+    font-size: medium;
+    color: rgb(84, 78, 238);
+}
+.preview--page--p .print--text{
+    font-size: 1rem;
+    font-family: poppins;
+}
+
+.preview--page--p .section--2 {
+    background-color: rgb(136, 240, 240);
+}
+
+.preview--page--p .section--2 ul{
+    list-style: none;
+    margin: 0px;
+}
+
+.preview--page--p .techSkill--setup{
+    display: flex;
+    flex-wrap: wrap;
+}
+.preview--page--p .section--2 .added--techSkill{
+    width: fit-content;
+    height: fit-content;
+    background-color: blue;
+    border-radius: 15px;
+    color: white;
+    margin: 5px;
+    padding: 10px;
+}
+
+.preview--page--p .softSkill--setup{
+    display: flex;
+    flex-wrap: wrap;
+}
+.preview--page--p .added--softSkill{
+    width: fit-content;
+    height: fit-content;
+    background-color: rgb(132, 0, 255);
+    border-radius: 15px;
+    color: white;
+    margin: 5px;
+    padding: 10px;
+}
+
+.preview--page--p .added--exp{
+    width: fit-content;
+    height: fit-content;
+    background-color: rgb(224, 7, 181);
+    color: white;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.preview--page--p .section--3{
+    background-color: rgb(247, 181, 150);
+}
+
+.preview--page--p .section--3 .interest--setup{
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0px;
+}
+
+.preview--page--p .added--interest{
+    width: fit-content;
+    height: fit-content;
+    background-color: rgb(251, 89, 44);
+    color: white;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.preview--page--p .section--3 .gen--interest--setup{
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
+.preview--page--p .section--3 .added--genInterest{
+    width: fit-content;
+    height: fit-content;
+    background-color: rgba(158, 121, 8, 0.577);
+    color: white;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.preview--page--p .section--4{
+    background-color: rgb(159, 230, 159);
+}
+
+.preview--page--p .final--btns{
+    display: flex;
+    width: 100%;
+    height: 60px;
+    justify-content: space-between;
+}
+
+.preview--page--p .final--btns .previous{
+    width: 30%;
+    margin-left: 10%;
+}
+
+.preview--page--p .final--btns .submission{
+    background: linear-gradient(blue , blueviolet);
+    width: 30%;
+    margin-right: 10%;
+}
+
+@media (max-width : 768px) {
+    .preview--page--p{
+        width: 90%;
+    }
+    .preview--page--p .section{
+        width: 90%;
+    }
+}
