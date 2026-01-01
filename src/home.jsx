@@ -1,6 +1,9 @@
 import React from 'react'
 import { useRef } from 'react'
 import './style.css'
+import { replace } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import logo from '../src/assets/connectU_logo.png'
 
 const Home = () => {
 
@@ -54,10 +57,15 @@ const Home = () => {
     return () => clearTimeout(timeout);
   }, [charIndex, isDeleting, wordIndex]);
 
+  const navigate = useNavigate();
+  const WelcomeMainPage = () => {
+    navigate("/mainpage", {replace : true})
+  }
+
   return (
     <div className='connectU--m'>
       <div className="nav--bar">
-        <img src="./src/assets/connectU_logo.png" alt="logo" className='main--logo' />
+        <img src={logo} alt="logo" className='main--logo' />
         <a href='#' className='Home--btn'>Home</a>
         <button onClick={scrollHowItWorks} className='btn--howItWorks'>How It Works ?</button>
       </div>
@@ -72,7 +80,7 @@ const Home = () => {
           <h3>Build Your Dream Team for College Competitions</h3>
           <h3>Find the right Teammates with matching skills, interests and Experience .</h3>
         </div>
-        <button className='getStarted--btn'>Get Started</button>
+        <button className='getStarted--btn' onClick={WelcomeMainPage}>Get Started</button>
       </section>
       <section className='web--description' ref={about}>
         <p className='intro--text'>We help you to </p>

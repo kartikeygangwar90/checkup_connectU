@@ -1373,7 +1373,6 @@
   width: 90%;
   height: fit-content; 
   text-align: center;
-  border: 2px solid blue; 
   justify-self: center;
 }
 
@@ -1388,4 +1387,94 @@
   cursor: pointer;
   padding: 10px;
   margin: 0px auto auto auto;
+}
+
+/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+/* ----Styling of Events and team making page---------- */
+
+.mainpage--mp {
+  width: 100%;
+  max-width: 1300px;
+  height: fit-content;
+  justify-self: center;
+}
+
+.mainpage--mp .header--navbar{
+  width: 90%;
+  height: fit-content;
+  justify-self: center;
+  display: flex;
+}
+
+.mainpage--mp .header--navbar .mainlogo{
+  width: 12%;
+  border-radius: 50%;
+  margin-left: 5px;
+  border: 2px solid red;
+}
+
+.mainpage--mp .header--navbar .logo--heading {
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 0px;
+}
+.mainpage--mp .header--navbar .logo--desc {
+  margin-left: 10px;
+}
+.mainpage--mp .header--navbar .logo--desc p{
+  font-family: 'Inter', sans-serif;
+}
+
+.mainpage--mp .header--navbar .notification--navbar{
+  width: 25%;
+  height: fit-content;
+  align-self: center;
+  margin-left: auto;
+  margin-right: 20px;
+  padding: 10px;
+  border: none;
+  background-color: #4bbeefbc;
+  border-radius: 20px;
+}
+
+.mainpage--mp .search--teams{
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  justify-content: end;
+}
+
+.mainpage--mp .search--teams .search--tab{
+  width: 75%;
+  height: 40px;
+  border-radius: 15px;
+  margin-right: 50px;
+  text-indent: 20px;
+  border: none;
+  background-color: rgb(243, 241, 241);
+}
+
+.mainpage--mp .browsing--section {
+  width: 100%;
+  height: 600px;
+  margin-top: 20px;
+  border: 2px solid yellowgreen;
+}
+
+.mainpage--mp .browsing--section .browsing--options {
+  display: flex;
+  width: 90%;
+  justify-self: center;
+}
+.mainpage--mp .browsing--section .browsing--options .browse--op{
+  margin: 20px auto;
+  width: 25%;
+  height: 30px;
+  border-radius: 20px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family:'Times New Roman', Times, serif;
 }

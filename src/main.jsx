@@ -8,6 +8,7 @@ import Profile from "./profile";
 import PrivateRoute from "./privateRoute";
 import Policy from "./Terms&Conditions";
 import Home from "./home";
+import Mainpage from "./mainpage";
 
 reactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -25,7 +26,9 @@ reactDOM.createRoot(document.getElementById("root")).render(
           <Route
             path="/profile"
             element={
+              <PrivateRoute>
                 <Profile />
+              </PrivateRoute>
             }
           />
           <Route
@@ -40,6 +43,11 @@ reactDOM.createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
           />
+          <Route
+          path="/mainpage"
+          element = {<Mainpage />}
+          >
+          </Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
