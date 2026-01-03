@@ -2185,3 +2185,37 @@
   border: 2px;
 }
 
+/*  designing the page 3 for you section------ */
+
+.mainpage--mp .foryou--section {
+  margin: 0px;
+  padding: 10px;
+  width: 100%;
+  height: fit-content;
+  justify-self: center;
+  background: linear-gradient(rgb(198, 251, 198), rgb(219, 147, 252));
+}
+
+.mainpage--mp .foryou--section .section--heading {
+  font-size: 1.4rem;
+  font-family: 'Poppins', sans-serif;
+}
+.mainpage--mp .foryou--section .section--desc{
+  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.mainpage--mp .foryou--section .working--foryou{
+  width: 90%;
+  height: fit-content;
+  justify-self: center;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: rgb(255, 188, 210);
+}
+.mainpage--mp .foryou--section .working--foryou .working--heading{
+  font-family: 'Poppins', sans-serif;
+}
+.mainpage--mp .foryou--section .working--foryou .working--desc{
+  font-family: 'Inter', sans-serif;
+}

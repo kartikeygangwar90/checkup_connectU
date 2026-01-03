@@ -4,6 +4,8 @@ import data from "./eventsData";
 import { useContext } from "react";
 import { TeamContext } from "./context/TeamContext";
 import logo from "./assets/connectU_logo.png";
+import { doc, getDoc} from "firebase/firestore";
+import { auth, dataBase } from "./firebase";
 
 const Mainpage = () => {
   const { teams, addTeam, loadingTeams } = useContext(TeamContext);
@@ -95,6 +97,53 @@ const Mainpage = () => {
 
   const [openJoinModel, setOpenJoinModel] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = React.useState(null);
+
+  const [userProfile, setUserProfile] = React.useState(null); 
+  React.useEffect(() => {
+    const fetchUserProfile = async () => {
+      if(!auth.currentUser) return;
+
+      const uid =auth.currentUser.uid;
+      const userRef = doc(dataBase, "users", uid);
+      const snap = await getDoc(userRef);
+
+      if(snap.exists()) {
+        setUserProfile(snap.data());
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  const userSkills = React.useMemo(() => {
+    if(!userProfile) return [];
+
+    return [
+      ...(userProfile.technicalSkills || []),
+      ...(userProfile.softSkills || []),
+    ];
+  }, [userProfile])
+
+  const calculateMatchPercentage = (userSkills, teamSkills) => {
+    if(!teamSkills || teamSkills.length === 0) return 0;
+
+    const user = userSkills.map((skill) => skill.toLowerCase());
+    const team = teamSkills.map((skill) => skill.toLowerCase());
+
+    const matched = team.filter((skill) => user.includes(skill));
+    return Math.round((matched.length / team.length) * 100);
+  }
+
+  const forYouTeams = React.useMemo (() => {
+    if(!userProfile) return [];
+
+    return teams.map((team) => ({
+      ...team,
+      matchPercent : calculateMatchPercentage(userSkills, team.skills),
+    }))
+    .filter(team => team.matchPercent >= 30)
+    .sort((a,b) => b.matchPercent - a.matchPercent);
+  }, [teams, userSkills, userProfile]);
 
   return (
     <div className="mainpage--mp">
@@ -463,6 +512,77 @@ const Mainpage = () => {
                 </form>
               </div>
             </div>
+          )}
+        </div>
+      )}
+
+      {page === 3 && (
+        <div className="foryou--section">
+          <h1 className="section--heading">Recommended for you</h1>
+          <p className="section--desc">Teams that match your skills and Interest</p>
+          <div className="working--foryou">
+            <p className="working--heading"><strong>How matching works</strong></p>
+            <p className="working--desc">We analyze your skills, interests, and preferences to find teams that are the best fit for you.</p>
+          </div>
+          {!userProfile ? (
+            <p>Loading recommendations... Please wait....</p>
+          ) : forYouTeams.length === 0 ? (
+          <p>No matching Teams yet . Try improving your Profile</p>
+          ) : (
+              <div className="card--section">
+                {forYouTeams.map((team) => (
+                  <div key={team.id} className="foryou--team--card">
+                    <div className="match--badge">
+                      {team.matchPercent}% Match
+                    </div>
+
+                    <h3>{teamName}</h3>
+                    <p>{team.eventName}</p>
+                    <p>{team.teamDesc}</p>
+
+                    <div className="skill--arena">
+                      {team.skills.map((skill, i) => (
+                        <span
+                        key={i}
+                        className={
+                          userSkills.map((s) => s.toLowerCase()).includes(skill.toLowerCase()) ? "skill--matched" : "skill-selected"
+                        }
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+
+                    <button
+                    className="bowse--request"
+                    onClick={() => {
+                      setSelectedTeam(team);
+                      setOpenJoinModel(true);
+                      document.body.style.overflow = "hidden";
+                    }}
+                    >
+                       <span className="request--icon">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                          <circle cx="8.5" cy="7" r="4" />
+                          <line x1="20" y1="8" x2="20" y2="14" />
+                          <line x1="17" y1="11" x2="23" y2="11" />
+                        </svg>
+                      </span>
+                      Request to join
+                    </button>
+                  </div>
+                ))}
+              </div>
           )}
         </div>
       )}
