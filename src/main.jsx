@@ -15,35 +15,37 @@ reactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Access />} />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/policy" element={<Policy />} />
-          <Route
-            path="/home"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/mainpage"
-            element={
-              <TeamProvider>
-                <Mainpage />
-              </TeamProvider>
-            }
-          ></Route>
-        </Routes>
+        <TeamProvider>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Access />} />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/policy" element={<Policy />} />
+            <Route
+              path="/home"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/mainpage"
+              element={
+                <PrivateRoute>
+                  <Mainpage />
+                </PrivateRoute>
+              }
+            ></Route>
+          </Routes>
+        </TeamProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

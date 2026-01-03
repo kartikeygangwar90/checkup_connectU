@@ -1,55 +1,60 @@
 const data =  [
     {
         index: 1,
-        imgSrc: "../src/assets/react.svg",
+        imgSrc: "../src/assets/research.png",
         alt: "logo",
         eventHeading: "Research Paper Presentation",
         eventDesc: "Present you best at the event . All the best to you all for the event",
         eventTime: "18 january, 2026",
         eventLocation: "BIT Patna",
         teamRegistered: 0,
-        spotsAvailable: 0
+        spotsAvailable: 0,
+        category: "Academic",
     },
     {
         index: 2,
-        imgSrc: "./src/assets/react.svg",
+        imgSrc: "./src/assets/hackathon.png",
         alt: "logo",
         eventHeading: "Startup Pitch competition",
         eventDesc: "Present you best at the event . All the best to you all for the event",
         eventTime: "20jan, 2026",
         eventLocation: "NIT Patna",
         teamRegistered: 0,
-        spotsAvailable: 0
+        spotsAvailable: 0,
+        category: "E-Commerce",
     },
     {
         index: 3,
-        imgSrc: "./src/assets/react.svg",
+        imgSrc: "./src/assets/research.png",
         eventHeading: "Hackathon",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",
         eventLocation: "Online",
         teamRegistered: 0,
-        spotsAvailable: 0
+        spotsAvailable: 0,
+        category: "Technical",
     },
     {
         index: 4,
-        imgSrc: "./src/assets/react.svg",
+        imgSrc: "./src/assets/football.png",
         eventHeading: "Football",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",
         eventLocation: "Online",
         teamRegistered: 0,
-        spotsAvailable: 0
+        spotsAvailable: 0,
+        category: "Sports",
     },
     {
         index: 5,
-        imgSrc: "./src/assets/react.svg",
+        imgSrc: "./src/assets/hackathon.png",
         eventHeading: "Technika",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",
         eventLocation: "Online",
         teamRegistered: 0,
-        spotsAvailable: 0
+        spotsAvailable: 0,
+        category: "Technical",
     },
 ]
 
