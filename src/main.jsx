@@ -22,9 +22,7 @@ reactDOM.createRoot(document.getElementById("root")).render(
             <Route
               path="/profile"
               element={
-                <PrivateRoute>
-                  <ProfileSetup />
-                </PrivateRoute>
+                <ProfileSetup />
               }
             />
             <Route path="/policy" element={<Policy />} />
