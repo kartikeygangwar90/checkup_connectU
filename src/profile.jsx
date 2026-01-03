@@ -140,6 +140,7 @@ function ProfileSetup() {
   // for navigating to the next page ------------------>
   const navigate = useNavigate();
   const routeHomePage = async () => {
+    if(!auth.currentUser) return;
     const uid = auth.currentUser.uid;
 
     await updateDoc(doc(dataBase, "users", uid), {
@@ -210,8 +211,8 @@ function ProfileSetup() {
 
         {step === 1 && (
           <div className="info--section--p">
-            <h3 class="head-tag">Personal Info</h3>
-            <p class="tag">Lets start with the basics</p>
+            <h3 className="head-tag">Personal Info</h3>
+            <p className="tag">Lets start with the basics</p>
             <h5 className="name--heading">
               Full Name <span className="required">*</span>
             </h5>
@@ -219,7 +220,7 @@ function ProfileSetup() {
               type="text"
               className="full--name"
               placeholder="Enter your full name"
-              value={userData.value}
+              value={userData.fullName}
               onChange={(e) =>
                 setUserData({ ...userData, fullName: e.target.value })
               }
@@ -231,7 +232,7 @@ function ProfileSetup() {
               type="text"
               className="email--input"
               placeholder="nitp email id"
-              value={userData.value}
+              value={userData.nitpemail}
               onChange={(e) =>
                 setUserData({ ...userData, nitpemail: e.target.value })
               }
@@ -293,7 +294,7 @@ function ProfileSetup() {
               type="text"
               className="bio--input"
               placeholder="Tell us a bit about yourself... (optional)"
-              value={userData.value}
+              value={userData.bio}
               onChange={(e) =>
                 setUserData({ ...userData, bio: e.target.value })
               }
@@ -317,7 +318,7 @@ function ProfileSetup() {
                   ? "disabled"
                   : ""
               }`}
-              onClick={step === 4 ? Preview : nextStep}
+              onClick={nextStep}
               disabled={
                 !userData.fullName ||
                 userData.nitpemail === "" ||
@@ -333,8 +334,8 @@ function ProfileSetup() {
 
         {step === 2 && (
           <div className="skills--info--p">
-            <h3 class="head-tag skills">Your Skills</h3>
-            <p class="tag skills">
+            <h3 className="head-tag skills">Your Skills</h3>
+            <p className="tag skills">
               Let others discover what you bring to a team
             </p>
             <h4 className="technical--heading">
@@ -453,7 +454,7 @@ function ProfileSetup() {
                 <button
                   key={exp}
                   className={`exp--box ${
-                    userData.experience.includes(exp) ? "clicked--exp" : ""
+                    userData.experience === exp ? "clicked--exp" : ""
                   }`}
                   onClick={() => toggleExperience(exp)}
                 >
@@ -480,7 +481,7 @@ function ProfileSetup() {
                     : ""
                 }
                           >`}
-                onClick={step === 4 ? Preview : nextStep}
+                onClick={nextStep}
                 disabled={
                   userData.technicalSkills.length === 0 ||
                   userData.softSkills.length === 0 ||
@@ -496,7 +497,7 @@ function ProfileSetup() {
         {step === 3 && (
           <div className="interest--info--p">
             <h3 className="head-tag">Your Interest</h3>
-            <p class="tag skills">
+            <p className="tag skills">
               Let others discover what you bring to a team
             </p>
             <h4 className="technical--heading">
@@ -521,7 +522,7 @@ function ProfileSetup() {
             <h4 id="tech--head" className="technical--heading">
               General Interests <span className="required">*</span>
             </h4>
-            <p class="tag skills">What else are you passionate about ?</p>
+            <p className="tag skills">What else are you passionate about ?</p>
             <div className="general--interest--boxes">
               {interests.map((interest) => (
                 <button
@@ -554,7 +555,7 @@ function ProfileSetup() {
                     ? "disabled"
                     : ""
                 }`}
-                onClick={step === 4 ? Preview : nextStep}
+                onClick={nextStep}
                 disabled={
                   userData.interests.length === 0 ||
                   userData.generalInterest.length === 0
@@ -569,7 +570,7 @@ function ProfileSetup() {
         {step === 4 && (
           <div className="contact--info--p">
             <h3 className="head-tag">Contact Info</h3>
-            <p class="tag skills">How can we reach you out ?</p>
+            <p className="tag skills">How can we reach you out ?</p>
             <h4 className="technical--heading">
               Roll number <span className="required">*</span>
             </h4>
@@ -577,7 +578,7 @@ function ProfileSetup() {
               type="number"
               placeholder="Enter Roll Number"
               className="contact--input"
-              value={userData.value}
+              value={userData.roll}
               onChange={(e) =>
                 setUserData({ ...userData, roll: e.currentTarget.value })
               }
@@ -590,7 +591,7 @@ function ProfileSetup() {
               type="text"
               placeholder="Enter Personal Email Id"
               className="contact--input"
-              value={userData.value}
+              value={userData.pemail}
               onChange={(e) =>
                 setUserData({ ...userData, pemail: e.target.value })
               }
@@ -603,7 +604,7 @@ function ProfileSetup() {
               type="number"
               placeholder="Enter Active Phone Number"
               className="contact--input"
-              value={userData.value}
+              value={userData.phone}
               onChange={(e) =>
                 setUserData({ ...userData, phone: e.target.value })
               }
@@ -619,7 +620,7 @@ function ProfileSetup() {
                 <button
                   key={value}
                   className={`avail ${
-                    userData.availability.includes(value)
+                    userData.availability === value
                       ? "avail--choosen"
                       : ""
                   }`}

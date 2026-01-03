@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
 import { TeamProvider } from "./context/TeamContext";
 import Access from "./access";
-import Profile from "./profile";
+import ProfileSetup from "./profile"
 import PrivateRoute from "./privateRoute";
 import Policy from "./Terms&Conditions";
 import Home from "./home";
@@ -23,7 +23,7 @@ reactDOM.createRoot(document.getElementById("root")).render(
               path="/profile"
               element={
                 <PrivateRoute>
-                  <Profile />
+                  <ProfileSetup />
                 </PrivateRoute>
               }
             />
