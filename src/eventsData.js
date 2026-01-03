@@ -1,7 +1,7 @@
 const data =  [
     {
         index: 1,
-        imgSrc: "../src/assets/research.png",
+        imgSrc: "/images/research.png",
         alt: "logo",
         eventHeading: "Research Paper Presentation",
         eventDesc: "Present you best at the event . All the best to you all for the event",
@@ -13,7 +13,7 @@ const data =  [
     },
     {
         index: 2,
-        imgSrc: "./src/assets/hackathon.png",
+        imgSrc: "/images/hackathon.png",
         alt: "logo",
         eventHeading: "Startup Pitch competition",
         eventDesc: "Present you best at the event . All the best to you all for the event",
@@ -25,7 +25,7 @@ const data =  [
     },
     {
         index: 3,
-        imgSrc: "./src/assets/research.png",
+        imgSrc: "/images/research.png",
         eventHeading: "Hackathon",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",
@@ -36,7 +36,7 @@ const data =  [
     },
     {
         index: 4,
-        imgSrc: "./src/assets/football.png",
+        imgSrc: "/images/football.png",
         eventHeading: "Football",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",
@@ -47,7 +47,7 @@ const data =  [
     },
     {
         index: 5,
-        imgSrc: "./src/assets/hackathon.png",
+        imgSrc: "/images/hackathon.png",
         eventHeading: "Technika",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",

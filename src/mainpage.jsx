@@ -73,7 +73,7 @@ const Mainpage = () => {
     <div className="mainpage--mp">
       <div className="header--navbar">
         <img
-          src="./src/assets/connectU_logo.png"
+          src="/images/connectU_logo.png"
           alt="logo"
           className="mainlogo"
         />
