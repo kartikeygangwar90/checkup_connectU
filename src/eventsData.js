@@ -1,7 +1,10 @@
+import logo from "../public/images/connectU_logo.png"
+import image2 from "../public/images/research.png"
+
 const data =  [
     {
         index: 1,
-        imgSrc: "/images/research.png",
+        imgSrc: {logo},
         alt: "logo",
         eventHeading: "Research Paper Presentation",
         eventDesc: "Present you best at the event . All the best to you all for the event",
@@ -13,7 +16,7 @@ const data =  [
     },
     {
         index: 2,
-        imgSrc: "/images/hackathon.png",
+        imgSrc: {image2},
         alt: "logo",
         eventHeading: "Startup Pitch competition",
         eventDesc: "Present you best at the event . All the best to you all for the event",
@@ -25,7 +28,7 @@ const data =  [
     },
     {
         index: 3,
-        imgSrc: "/images/research.png",
+        imgSrc: {image2},
         eventHeading: "Hackathon",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",
@@ -36,7 +39,7 @@ const data =  [
     },
     {
         index: 4,
-        imgSrc: "/images/football.png",
+        imgSrc: {image2},
         eventHeading: "Football",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",
@@ -47,7 +50,7 @@ const data =  [
     },
     {
         index: 5,
-        imgSrc: "/images/hackathon.png",
+        imgSrc: {image2},
         eventHeading: "Technika",
         eventDesc: "Present you best at the event . All the best to you all for the even",
         eventTime: "5 jan, 2025",
