@@ -86,7 +86,6 @@ const Home = () => {
         <p className='intro--text'>We help you to </p>
 
         <h2 className='typing--line'>
-          {/* <span className='static-text'>Connect ,</span> */}
           <span className='dynamic--text'>{typedWord}</span>
           <span className='cursor--typing'>|</span>
         </h2>

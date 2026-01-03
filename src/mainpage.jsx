@@ -3,13 +3,13 @@ import "./style.css";
 import data from "./eventsData";
 import { useContext } from "react";
 import { TeamContext } from "./context/TeamContext";
-import logo from "./assets/connectU_logo.png"
+import logo from "./assets/connectU_logo.png";
 
 const Mainpage = () => {
   const { teams, addTeam, loadingTeams } = useContext(TeamContext);
 
-  if(loadingTeams) {
-    return <h2>Loading Teams....</h2>
+  if (loadingTeams) {
+    return <h2>Loading Teams....</h2>;
   }
 
   const [teamData, setTeamData] = React.useState({
@@ -69,15 +69,37 @@ const Mainpage = () => {
 
     setTeamChoice(false);
   };
+  const [eventSelected, setEventSelected] = React.useState(true);
+  const [choosenEvent, setChoosenEvent] = React.useState("");
+  const toggleFilterEvent = (event, index) => {
+    if (choosenEvent === event) {
+      setChoosenEvent("")
+      setTeamData((prev) => ({
+        ...prev,
+        eventName: "",
+      }))
+    }
+    else {
+      setChoosenEvent(event);
+      setTeamData((prev) => ({
+        ...prev,
+        eventName: event,
+      }));
+    }
+    setEventSelected(true);
+  };
+
+  const filteredTeams = choosenEvent ? teams.filter((team) =>
+    team.eventName?.toLowerCase() === choosenEvent.toLowerCase()
+  ) : teams;
+
+  const [openJoinModel, setOpenJoinModel] = React.useState(false);
+  const [selectedTeam, setSelectedTeam] = React.useState(null);
 
   return (
     <div className="mainpage--mp">
       <div className="header--navbar">
-        <img
-          src={logo}
-          alt="logo"
-          className="mainlogo"
-        />
+        <img src={logo} alt="logo" className="mainlogo" />
         <div className="logo--desc">
           <h2 className="logo--heading">TeamUp</h2>
           <p>Find your perfect team</p>
@@ -123,12 +145,40 @@ const Mainpage = () => {
         <div className="events--section">
           <h1 className="event--heading">Upcoming Events</h1>
           <p className="event--desc">Find events that match your interests</p>
+          {eventSelected && (
+            <div className="filter--section">
+              <div className="filter--area">
+                <h3>Filtered Event: </h3>
+                <p>{choosenEvent}</p>
+              </div>
+              {choosenEvent === "" ? (
+                ""
+              ) : (
+                <p>
+                  {" "}
+                  " Go to <strong>Teams Section</strong> to find available teams
+                  for the event "
+                </p>
+              )}
+            </div>
+          )}
           <div className="event--cards--section">
             {data.map((card) => (
-              <div className="events--card">
+              <div
+                className={`events--card ${choosenEvent === card.eventHeading ? "event--filled" : ""
+                  }`}
+                onClick={() => toggleFilterEvent(card.eventHeading, card.index)}
+              >
                 <div className="card--img">
                   <img src={card.imgSrc} alt={card.alt} />
-                  <span className = {`category--badge ${card.category === "Academic" ? "academic" : ""} ${card.category === "Technical" ? "technical" : ""} ${card.category === "Cultural" ? "cultural": ""} ${card.category === "Sports" ? "sports" : ""} ${card.category === "E-Commerce" ? "e-commerce" : ""}`}>{card.category}</span>
+                  <span
+                    className={`category--badge ${card.category === "Academic" ? "academic" : ""
+                      } ${card.category === "Technical" ? "technical" : ""} ${card.category === "Cultural" ? "cultural" : ""
+                      } ${card.category === "Sports" ? "sports" : ""} ${card.category === "E-Commerce" ? "e-commerce" : ""
+                      }`}
+                  >
+                    {card.category}
+                  </span>
                 </div>
                 <div className="event--idea">
                   <h2>{card.eventHeading}</h2>
@@ -149,7 +199,7 @@ const Mainpage = () => {
           <div className="choosing--team--type">
             <div className="team--browse">
               <button
-                className="team--option"
+                className={`team--option ${!teamChoice ? "team--choice" : ""}`}
                 onClick={() => handleTeamChoice(false)}
               >
                 Browse Teams
@@ -158,7 +208,7 @@ const Mainpage = () => {
             </div>
             <div className="team--formation">
               <button
-                className="team--create"
+                className={`team--create ${teamChoice ? "team--choice" : ""}`}
                 onClick={() => handleTeamChoice(true)}
               >
                 Create Team
@@ -168,10 +218,21 @@ const Mainpage = () => {
               </p>
             </div>
           </div>
+          <div className="filtered--event">
+            <h2>Choosen Event: &nbsp;</h2>
+            <p>{choosenEvent}</p>
+            {!choosenEvent && (
+              <span>
+                Please choose an event to filter the teams accordingly
+              </span>
+            )}
+          </div>
           {teamChoice && (
             <div className="create--block">
               <div className="teamName">
-                <h2 className="create--heading">Team name:<span className="required">*</span> &nbsp;</h2>
+                <h2 className="create--heading">
+                  Team name:<span className="required">*</span> &nbsp;
+                </h2>
                 <input
                   type="text"
                   className="input--teamname"
@@ -183,19 +244,21 @@ const Mainpage = () => {
                 />
               </div>
               <div className="eventName">
-                <h2 className="create--heading">Event Name:<span className="required">*</span> &nbsp; </h2>
+                <h2 className="create--heading">
+                  Event Name:<span className="required">*</span> &nbsp;{" "}
+                </h2>
                 <input
                   type="text"
                   className="input--eventname"
                   placeholder="Enter Event Name"
-                  value={teamData.eventName}
-                  onChange={(e) =>
-                    setTeamData({ ...teamData, eventName: e.target.value })
-                  }
+                  value={choosenEvent}
+                  readOnly
                 />
               </div>
               <div className="teamDescription">
-                <h2 className="create--heading">Team Description:<span className="required">*</span> &nbsp;</h2>
+                <h2 className="create--heading">
+                  Team Description:<span className="required">*</span> &nbsp;
+                </h2>
                 <input
                   type="text"
                   className="input--desc"
@@ -207,7 +270,9 @@ const Mainpage = () => {
                 />
               </div>
               <div className="teamSize">
-                <h2 className="create--heading">Team Size:<span className="required">*</span> &nbsp;</h2>
+                <h2 className="create--heading">
+                  Team Size:<span className="required">*</span> &nbsp;
+                </h2>
                 <select
                   className="input--teamSize"
                   value={teamData.teamSize}
@@ -225,7 +290,9 @@ const Mainpage = () => {
                 </select>
               </div>
               <div className="teamSkills">
-                <h2 className="create--heading">Skills Required:<span className="required">*</span> &nbsp;</h2>
+                <h2 className="create--heading">
+                  Skills Required:<span className="required">*</span> &nbsp;
+                </h2>
                 <input
                   type="text"
                   className="input--skills"
@@ -277,10 +344,16 @@ const Mainpage = () => {
               </div>
               <div className="team--submission">
                 <button
-                 className="team--submit"
+                  className="team--submit"
                   onClick={handleSubmit}
-                  disabled = {teamData.teamName === "" || teamData.eventName === "" || teamData.teamDesc === "" || teamData.teamSize === "" || teamData.skills.length === 0}
-                   >
+                  disabled={
+                    teamData.teamName === "" ||
+                    choosenEvent === "" ||
+                    teamData.teamDesc === "" ||
+                    teamData.teamSize === "" ||
+                    teamData.skills.length === 0
+                  }
+                >
                   Create Team
                 </button>
               </div>
@@ -288,14 +361,14 @@ const Mainpage = () => {
           )}
           {!teamChoice && (
             <div className="browse--block">
-              {teams.length === 0 && (
+              {filteredTeams.length === 0 && (
                 <div>
                   <h1 className="main--heading">Sorry !!</h1>
                   <h1 className="main--heading">
                     No Teams created for this Event
                   </h1>
                   <h2 className="empty--desc">
-                    Either make a new Team or Filter another Event to discover
+                    Either Create a new Team or Choose another Event to discover
                     available teams
                   </h2>
                   <p className="open--browsing">
@@ -308,7 +381,7 @@ const Mainpage = () => {
               )}
 
               <div className="card--section">
-                {teams.map((team) => (
+                {filteredTeams.map((team) => (
                   <div key={team.id} className="team--card">
                     <h3 className="browse---teamName">{team.teamName}</h3>
                     <p className="browse--eventName">{team.eventName}</p>
@@ -332,9 +405,62 @@ const Mainpage = () => {
                     <p className="browse--leader">
                       Team Leader: &nbsp; {team.leader}
                     </p>
-                    <button className="browse--Request">Request to join</button>
+                    <button
+                      className="browse--Request"
+                      onClick={() => {
+                        setSelectedTeam(team);
+                        setOpenJoinModel(true);
+                        document.body.style.overflow = "hidden";
+                      }}
+                    >
+                      <span className="request--icon">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                          <circle cx="8.5" cy="7" r="4" />
+                          <line x1="20" y1="8" x2="20" y2="14" />
+                          <line x1="17" y1="11" x2="23" y2="11" />
+                        </svg>
+                      </span>
+                      Request to join
+                    </button>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+          {openJoinModel && (
+            <div
+              className="join--model--backdrop"
+              onClick={() => {
+                setOpenJoinModel(false);
+                document.body.style.overflow = "auto";
+              }}
+            >
+              <div className="join--model" onClick={(e) => e.stopPropagation()}>
+                <span
+                  className="join--model--close"
+                  onClick={() => {
+                    setOpenJoinModel(false);
+                    document.body.style.overflow = "auto";
+                  }}
+                >
+                  ✕
+                </span>
+
+                <h2>Request to Join</h2>
+                <form className="join--form">
+                  <textarea placeholder="Why should we select you?" required />
+                  <button type="submit">Send request</button>
+                </form>
               </div>
             </div>
           )}
