@@ -2141,7 +2141,7 @@
   }
 }
 
-.mainpage--mp .teams--section .join--model--backdrop {
+.mainpage--mp .join--model--backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
@@ -2153,7 +2153,7 @@
   align-items: center;
 }
 
-.mainpage--mp .teams--section .join--model {
+.mainpage--mp .join--model {
   background: #ffffff;
   width: 90%;
   max-width: 450px;
@@ -2162,8 +2162,11 @@
   position: relative;
   z-index: 1000;
 }
+.mainpage--mp .join--model h2{
+  font-family: 'Poppins', sans-serif;
+}
 
-.mainpage--mp .teams--section .join--model--close {
+.mainpage--mp .join--model--close {
   position: absolute;
   top: 14px;
   right: 16px;
@@ -2171,18 +2174,24 @@
   cursor: pointer;
 }
 
-.mainpage--mp .teams--section .join--form textarea {
+.mainpage--mp .join--form textarea {
   width: 90%;
   align-self: center;
   justify-self: center;
   margin: 12px;
   padding: 10px;
+  border-radius: 10px;
+  border: 3px solid black;
 }
 
-.mainpage--mp .teams--section .join--form button {
+.mainpage--mp .join--form button {
   margin-top: 16px;
   width: 100%;
+  height: 40px;
   border: 2px;
+  border-radius: 10px;
+  background-color: chartreuse;
+  font-family: 'Poppins', sans-serif;
 }
 
 /*  designing the page 3 for you section------ */
@@ -2219,3 +2228,352 @@
 .mainpage--mp .foryou--section .working--foryou .working--desc{
   font-family: 'Inter', sans-serif;
 }
+
+.mainpage--mp .foryou--section .card--section {
+  display: flex;
+  height: fit-content;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-self: center;
+  justify-content: center;
+  width: 100%;
+  margin: 15px 5px;
+  /* border: 3px solid green; */
+}
+
+.mainpage--mp .foryou--section .card--section .foryou--team--card{
+  width: 30%;
+  max-width: 450px;
+  height: 300px;
+  /* border: 3px solid blue; */
+  padding: 5px 10px;
+  margin: 5px 10px;
+  border-radius: 10px;
+  background-color: white;
+  position: relative;
+  align-content: center;
+}
+.mainpage--mp .foryou--section .card--section .foryou--team--card .match--badge{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: black;
+  /* border: 1px solid green; */
+  padding: 3px 5px;
+  border-radius: 10px;
+  background-color: #00f2fe;
+}
+
+.mainpage--mp .foryou--section .card--section .foryou--team--card h3{
+  font-family: 'Poppins', sans-serif;
+  margin-top: 30px;
+}
+
+.mainpage--mp .foryou--section .card--section .foryou--team--card .event--foryou{
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold
+}
+
+.mainpage--mp .foryou--section .card--section .foryou--team--card p{
+  font-family: 'Inter', sans-serif;
+}
+
+.mainpage--mp .foryou--section .card--section .foryou--team--card .skill--arena{
+  width: 100%;
+  height: fit-content;
+  /* border: 2px solid red; */
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px;
+}
+
+.mainpage--mp .foryou--section .card--section .foryou--team--card .skill--arena .skill--matched{
+  height: fit-content;
+  width: fit-content;
+  border: 1px solid #2563eb;
+  padding: 5px;
+  background-color: #ef69fe;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.mainpage--mp .foryou--section .card--section .foryou--team--card .skill--arena .skill--selected{
+  height: fit-content;
+  width: fit-content;
+  /* border: 1px solid green; */
+  padding: 5px;
+  background-color: rgb(137, 208, 247);
+  border-radius: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.mainpage--mp .foryou--section .card--section .foryou--team--card .browse--request {
+  width: 90%;
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: white;
+  background-color: #111827;
+  cursor: pointer;
+  justify-self: center;
+}
+
+@media ( max-width : 1200px) {
+  .mainpage--mp .foryou--section .card--section .foryou--team--card {
+    width: 40%;
+    height: 330px;
+  }
+}
+
+@media (max-width : 900px) {
+  .mainpage--mp .foryou--section .card--section .foryou--team--card {
+    width: 40%;
+    height: 370px;
+  }
+}
+
+@media (max-width: 768px) {
+    .mainpage--mp .foryou--section .card--section .foryou--team--card {
+      width: 70%;
+      height: fit-content;
+    }
+}
+
+
+/* Styling the profle section or the 4th page  */
+
+.mainpage--mp .profile--section {
+  margin: 0px;
+  padding: 10px;
+  width: 100%;
+  height: fit-content;
+  justify-self: center;
+  background: linear-gradient(rgb(198, 251, 198), rgb(219, 147, 252));
+}
+
+.mainpage--mp .profile--section .section--heading {
+  font-size: 1.4rem;
+  font-family: 'Poppins', sans-serif;
+}
+.mainpage--mp .profile--section .section--desc{
+  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.mainpage--mp .profile--section .complete--profile {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 1200px;
+  justify-content: center;
+  justify-self: center;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px gray;
+}
+
+.mainpage--mp .profile--section .complete--profile:hover {
+  box-shadow: 7px 9px 15px black;
+}
+
+.mainpage--mp .profile--section .complete--profile .profile--model {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: fit-content;
+}
+
+.mainpage--mp .profile--section .profile--model .image--upload {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #f0f2f5;
+  border: 2px dashed #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+.mainpage--mp .profile--section .profile--model .image--upload:hover{
+  border-color: #4f46e5;
+  background: #eef2ff;
+}
+.mainpage--mp .profile--section .profile--model .image--upload img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mainpage--mp .profile--section .profile--model .image--upload .upload--plus {
+  font-size: 35px;
+  color: #666;
+  font-weight: bold;
+}
+
+.mainpage--mp .profile--section .complete--profile h3{
+  margin-left: 20px;
+  margin-bottom: 0px;
+}
+
+.mainpage--mp .profile--section .complete--profile .identity--lines p{
+  align-items: center;
+  margin-left: 20px;
+  margin-top: 0px;
+  padding: 0px;
+}
+
+.mainpage--mp .profile--section .complete--profile .profile--model .edit--clicked {
+  margin: auto 0px auto auto;
+  padding: 10px 15px;
+  border-radius: 15px;
+  border: 1px solid gray;
+  background-color: #d5e4fc;
+  justify-self: end;
+  font-size: 1rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.mainpage--mp .profile--section .complete--profile .user--email {
+  margin-left: 20px;
+  font-size: 1.2rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.mainpage--mp .profile--section .complete--profile .user--skills {
+  margin-left: 20px;
+  margin-bottom: 40px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.mainpage--mp .profile--section .complete--profile .user--skills p{
+  font-weight: 500;
+}
+
+.mainpage--mp .profile--section .complete--profile .skill--box {
+  width: fit-content;
+  height: fit-content;
+  border: 1px solid black;
+  background-color: #d7d6d6;
+  border-radius: 10px;
+  padding: 7px 12px;
+  margin: 5px;
+}
+
+.mainpage--mp .profile--section .complete--profile .user--interest {
+  margin-left: 20px;
+  margin-bottom: 40px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.mainpage--mp .profile--section .complete--profile .user--interest p {
+  font-weight: 500;
+}
+
+.mainpage--mp .profile--section .complete--profile .user--interest .interest--box {
+  width: fit-content;
+  height: fit-content;
+  border: 1px solid black;
+  background-color: #f0f0ee;
+  border-radius: 10px;
+  padding: 7px 12px;
+  margin: 5px;
+}
+
+@media (max-width : 768px) {
+  .mainpage--mp .profile--section .complete--profile {
+    display: flex;
+    flex-direction: column;
+  }
+  .mainpage--mp .profile--section .complete--profile .user--skills {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 90%;
+  }
+  .mainpage--mp .profile--section .complete--profile .user--skills .tech--arena{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .mainpage--mp .profile--section .complete--profile .user--skills .soft--arena {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .mainpage--mp .profile--section .complete--profile .user--interest {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  } 
+  .mainpage--mp .profile--section .complete--profile .user--interest .project--arena{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .mainpage--mp .profile--section .complete--profile .user--interest .general--arena{
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.mainpage--mp .edit--profile--backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.mainpage--mp .edit--profile--modal {
+  width: 90%;
+  max-width: 500px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  position: relative;
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  from{
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+.mainpage--mp .modal--close {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.mainpage--mp .edit--profile--modal input {
+  width: 87%;
+  margin: 3px 0;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.mainpage--mp .edit--profile--modal select{
+  width: 90%;
+  margin: 3px 0;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.mainpage--mp .edit--profile--modal .save--profile {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+

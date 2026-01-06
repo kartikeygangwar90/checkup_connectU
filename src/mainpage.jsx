@@ -4,7 +4,7 @@ import data from "./eventsData";
 import { useContext } from "react";
 import { TeamContext } from "./context/TeamContext";
 import logo from "./assets/connectU_logo.png";
-import { doc, getDoc} from "firebase/firestore";
+import { doc, getDoc, updateDoc} from "firebase/firestore";
 import { auth, dataBase } from "./firebase";
 
 const Mainpage = () => {
@@ -61,7 +61,7 @@ const Mainpage = () => {
     });
 
     setTeamData({
-      teamname: "",
+      teamName: "",
       teamDesc: "",
       teamSize: "",
       eventName: "",
@@ -98,6 +98,9 @@ const Mainpage = () => {
   const [openJoinModel, setOpenJoinModel] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = React.useState(null);
 
+  const [openEditProfile, setOpenEditProfile] = React.useState(false);
+  const [editProfileData, setEditProfileData] = React.useState(null);
+
   const [userProfile, setUserProfile] = React.useState(null); 
   React.useEffect(() => {
     const fetchUserProfile = async () => {
@@ -124,14 +127,23 @@ const Mainpage = () => {
     ];
   }, [userProfile])
 
-  const calculateMatchPercentage = (userSkills, teamSkills) => {
-    if(!teamSkills || teamSkills.length === 0) return 0;
+  const normalizeSkill = (skill) => skill.toLowerCase().replace(/[^a-z0-9]/g, "").trim();
 
-    const user = userSkills.map((skill) => skill.toLowerCase());
-    const team = teamSkills.map((skill) => skill.toLowerCase());
+  const calculateMatchPercentage = (userSkills, teamSkills, userInterests = [], teamEvent = "") => {
+    if(!teamSkills || teamSkills.length === 0) return 50;
 
-    const matched = team.filter((skill) => user.includes(skill));
-    return Math.round((matched.length / team.length) * 100);
+    let skillScore = 0;
+    if(teamSkills?.length) {
+      const user = userSkills.map(normalizeSkill);
+      const team = teamSkills.map(normalizeSkill);
+      skillScore = (team.filter((s) => user.includes(s)).length / team.length) *70;
+      }
+
+      let InterestScore = userInterests.some((i) => 
+      teamEvent?.toLowerCase().includes(i.toLowerCase())) ? 30 : 0;
+
+
+    return Math.round(skillScore + InterestScore);
   }
 
   const forYouTeams = React.useMemo (() => {
@@ -139,11 +151,21 @@ const Mainpage = () => {
 
     return teams.map((team) => ({
       ...team,
-      matchPercent : calculateMatchPercentage(userSkills, team.skills),
+      matchPercent : calculateMatchPercentage(userSkills, team.skills, userProfile.Interests, team.eventName),
     }))
-    .filter(team => team.matchPercent >= 30)
+    .filter(team => team.matchPercent >= 20)
     .sort((a,b) => b.matchPercent - a.matchPercent);
   }, [teams, userSkills, userProfile]);
+
+  const [image, setImage] = React.useState(null);
+  const fileInputRef = React.useRef(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+
+    setImage(URL.createObjectURL(file));
+  };
 
   return (
     <div className="mainpage--mp">
@@ -486,33 +508,6 @@ const Mainpage = () => {
               </div>
             </div>
           )}
-          {openJoinModel && (
-            <div
-              className="join--model--backdrop"
-              onClick={() => {
-                setOpenJoinModel(false);
-                document.body.style.overflow = "auto";
-              }}
-            >
-              <div className="join--model" onClick={(e) => e.stopPropagation()}>
-                <span
-                  className="join--model--close"
-                  onClick={() => {
-                    setOpenJoinModel(false);
-                    document.body.style.overflow = "auto";
-                  }}
-                >
-                  ✕
-                </span>
-
-                <h2>Request to Join</h2>
-                <form className="join--form">
-                  <textarea placeholder="Why should we select you?" required />
-                  <button type="submit">Send request</button>
-                </form>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
@@ -524,7 +519,7 @@ const Mainpage = () => {
             <p className="working--heading"><strong>How matching works</strong></p>
             <p className="working--desc">We analyze your skills, interests, and preferences to find teams that are the best fit for you.</p>
           </div>
-          {!userProfile ? (
+          {userSkills.length === 0 ? (
             <p>Loading recommendations... Please wait....</p>
           ) : forYouTeams.length === 0 ? (
           <p>No matching Teams yet . Try improving your Profile</p>
@@ -536,8 +531,8 @@ const Mainpage = () => {
                       {team.matchPercent}% Match
                     </div>
 
-                    <h3>{teamName}</h3>
-                    <p>{team.eventName}</p>
+                    <h3>{team.teamName}</h3>
+                    <p className="event--foryou">{team.eventName}</p>
                     <p>{team.teamDesc}</p>
 
                     <div className="skill--arena">
@@ -545,16 +540,17 @@ const Mainpage = () => {
                         <span
                         key={i}
                         className={
-                          userSkills.map((s) => s.toLowerCase()).includes(skill.toLowerCase()) ? "skill--matched" : "skill-selected"
+                          userSkills.map(normalizeSkill).includes(normalizeSkill(skill)) ? "skill--matched" : "skill--selected"
                         }
                         >
                           {skill}
                         </span>
                       ))}
                     </div>
+                    <p>Team Leader : {team.leader}</p>
 
                     <button
-                    className="bowse--request"
+                    className="browse--request"
                     onClick={() => {
                       setSelectedTeam(team);
                       setOpenJoinModel(true);
@@ -586,6 +582,240 @@ const Mainpage = () => {
           )}
         </div>
       )}
+
+      {page === 4 && (
+          <div className="profile--section">
+            <h1 className="section--heading">Your Profile</h1>
+            <p className="section--desc">Manage your profile to get a better team recommendations</p>
+            <div className="complete--profile">
+            <div className="profile--model">
+              <div
+              className="image--upload"
+              onClick={() => fileInputRef.current.click()}
+              >
+                {image ? (
+                  <img src={image} alt="profile-pic" />
+                ) : (
+                  <span className="upload--plus">+</span>
+                )}
+
+                <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                hidden 
+                />
+            </div>
+            <div className="identity--lines">
+              <h3>{userProfile.fullName}</h3>
+              <p>{userProfile.branch} <strong className="dot">.</strong> {userProfile.year} year</p>
+            </div>
+            <button
+             className="edit--clicked"
+             onClick={() => {
+              setEditProfileData({...userProfile});
+              setOpenEditProfile(true);
+              document.body.style.overflow = "hidden"
+             }}
+             >
+              Edit Profile
+              </button>
+          </div>
+            <p className="user--email">{userProfile.pemail}</p>
+            <div className="user--skills">
+              <p>Technical Skills : </p>
+              <div className="tech--arena">
+              {
+              userProfile.technicalSkills.map((skill) => (
+                <span className="skill--box">{skill}</span>
+              ))
+              }
+              </div>
+              <p>Soft Skills : </p>
+              <div className="soft--arena">
+              {
+                userProfile.softSkills.map((skill) => (
+                  <span className="skill--box">{skill}</span>
+                ))
+              }
+              </div>
+            </div>
+            <div className="user--interest">
+              <p>Project Type Interests : </p>
+              <div className="project--arena">
+              {
+                userProfile.interests.map((interest) => (
+                  <span className="interest--box">{interest}</span>
+                ))
+              }
+              </div>
+              <p>General Interests : </p>
+              <div className="general--arena">
+              {
+                userProfile.generalInterest.map((interest) => (
+                  <span className="interest--box">{interest}</span>
+                ))
+              }
+              </div>
+            </div>
+          </div>
+          </div>
+         )
+         } 
+
+      {
+        openEditProfile && (
+          <div
+           className="edit--profile--backdrop"
+           onClick={() => {
+            setOpenEditProfile(false);
+            document.body.style.overflow = "auto";
+           }}
+           >
+
+            <div
+            className="edit--profile--modal"
+            onClick={(e) => e.stopPropagation()}
+            >
+              <span
+              className="modal--close"
+              onClick={() => {
+                setOpenEditProfile(false);
+                document.body.style.overflow = "auto"
+              }}
+              >
+                ✕
+              </span>
+
+              <h2>Edit Profile </h2>
+              <div className="select--name">
+                <p>Full Name :</p>
+              <input
+              type="text"
+              placeholder="Full Name"
+              value={editProfileData.fullName}
+              onChange={(e) => 
+                setEditProfileData({
+                  ...editProfileData, fullName : e.target.value,
+                })
+              } 
+              />
+              </div>
+              <div className="select--branch">
+                <p>branch : </p>
+              <select
+              value={editProfileData.branch}
+              onChange={(e) => 
+                setEditProfileData({
+                  ...editProfileData, branch: e.target.value,
+                })
+              }
+              >
+                <option value="Computer Science Enginnering">Computer Science Enginnering</option>
+                <option value="Electronics and Communication Enginnering">Electronics and Communication Enginnering</option>
+                <option value="Civil Enginnering">Civil Enginnering</option>
+                <option value="Electrical Enginnering">Electrical Enginnering</option>
+                <option vlaue="Mechanical Enginnering">Mechanical Enginnering</option>
+              </select>
+              </div>
+              <div className="select--year">
+                <p>Year :</p>
+              <select 
+              value={editProfileData.year}
+              onChange={(e) => 
+                setEditProfileData({
+                  ...editProfileData, year : e.target.value,
+                })
+              }
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              </div>
+              <div className="select--phone">
+                <p>Phone Number : </p>
+              <input
+              type="number"
+              placeholder="Enter Active MObile Number" 
+              value={editProfileData.phone}
+              onChange={(e) => 
+                setEditProfileData({
+                  ...editProfileData, phone: e.target.value,
+                })
+              }
+              />
+              </div>
+              <div className="select--email">
+                <p>Active Personal Email : </p>
+                <input  
+                type="email"
+                placeholder="Enter Active Email Id"
+                value={editProfileData.pemail}
+                onChange={(e) =>
+                  setEditProfileData({
+                    ...editProfileData, pemail : e.target.value,
+                  })
+                }
+                />
+              </div>
+              <div className="select-avail">
+                <p>Available for joining teams ? </p>
+                <input type="radio" name="availability"  />
+              </div>
+              <button
+              className="save--profile"
+              onClick={async () => {
+                const uid = auth.currentUser.uid;
+                const userRef = doc(dataBase, "users", uid);
+
+                await updateDoc(userRef, editProfileData);
+
+                setUserProfile(editProfileData);
+                setOpenEditProfile(false);
+                document.body.style.overflow = "auto";
+              }}
+              >
+                Save Changes
+              </button>
+          </div>
+        
+        </div>
+      )}
+
+
+      {
+        openJoinModel && (
+            <div
+              className="join--model--backdrop"
+              onClick={() => {
+                setOpenJoinModel(false);
+                document.body.style.overflow = "auto";
+              }}
+            >
+              <div className="join--model" onClick={(e) => e.stopPropagation()}>
+                <span
+                  className="join--model--close"
+                  onClick={() => {
+                    setOpenJoinModel(false);
+                    document.body.style.overflow = "auto";
+                  }}
+                >
+                  ✕
+                </span>
+
+                <h2>Request to Join</h2>
+                <form className="join--form">
+                  <textarea placeholder="Why should we select you?" required />
+                  <button type="submit">Send request</button>
+                </form>
+              </div>
+            </div>
+          )}
+
+         
     </div>
   );
 };
