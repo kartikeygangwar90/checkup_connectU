@@ -3,7 +3,7 @@ import "./style.css";
 import data from "./eventsData";
 import { useContext } from "react";
 import { TeamContext } from "./context/TeamContext";
-import logo from "./assets/connectU_logo.png";
+import logo from "./assets/connect.png";
 import { doc, getDoc, updateDoc} from "firebase/firestore";
 import { auth, dataBase } from "./firebase";
 
@@ -583,7 +583,7 @@ const Mainpage = () => {
         </div>
       )}
 
-      {page === 4 && (
+      {page === 4 && userProfile && (
           <div className="profile--section">
             <h1 className="section--heading">Your Profile</h1>
             <p className="section--desc">Manage your profile to get a better team recommendations</p>
@@ -716,7 +716,7 @@ const Mainpage = () => {
                 <option value="Electronics and Communication Enginnering">Electronics and Communication Enginnering</option>
                 <option value="Civil Enginnering">Civil Enginnering</option>
                 <option value="Electrical Enginnering">Electrical Enginnering</option>
-                <option vlaue="Mechanical Enginnering">Mechanical Enginnering</option>
+                <option value="Mechanical Enginnering">Mechanical Enginnering</option>
               </select>
               </div>
               <div className="select--year">
@@ -821,3 +821,5 @@ const Mainpage = () => {
 };
 
 export default Mainpage;
+
+2

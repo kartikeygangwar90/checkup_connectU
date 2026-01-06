@@ -3,7 +3,7 @@ import { useRef } from 'react'
 import './style.css'
 import { replace } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import logo from "./assets/connectU_logo.png"
+import logo from "./assets/connect.png"
 
 const Home = () => {
 
