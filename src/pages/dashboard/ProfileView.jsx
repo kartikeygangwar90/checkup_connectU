@@ -248,6 +248,24 @@ const ProfileView = () => {
                             <span key={i} className="interest--box">{interest}</span>
                         ))}
                     </div>
+
+                    {/* Activities (Sports, Esports, Cultural) */}
+                    {userProfile.activities && userProfile.activities.length > 0 && userProfile.activities[0] !== "None" && (
+                        <>
+                            <p>🎮 Activities:</p>
+                            <div className="activities--arena" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                {userProfile.activities?.map((activity, i) => (
+                                    <span key={i} style={{
+                                        background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                                        padding: '0.4rem 0.8rem',
+                                        borderRadius: '1rem',
+                                        fontSize: '0.9rem',
+                                        color: 'white'
+                                    }}>{activity}</span>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
 

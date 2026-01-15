@@ -27,6 +27,7 @@ function Access() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
+  const [showResetSuccess, setShowResetSuccess] = useState(false);
 
   function wantLogin() {
     setOption(true);
@@ -159,9 +160,8 @@ function Access() {
 
       // Email exists in Firebase Auth, proceed to send reset link
       await sendPasswordResetEmail(auth, resetEmail);
-      toast.success('Password reset email sent! Check your inbox and spam folder.');
       setShowForgotPassword(false);
-      setResetEmail("");
+      setShowResetSuccess(true);
     } catch (error) {
       console.error("Password reset error:", error);
       if (error.code === "auth/user-not-found") {
@@ -506,6 +506,125 @@ function Access() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Password Reset Success Modal */}
+      {showResetSuccess && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.7)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000,
+          backdropFilter: 'blur(4px)'
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
+            padding: '2rem',
+            borderRadius: '1rem',
+            width: '90%',
+            maxWidth: '400px',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+            textAlign: 'center'
+          }}>
+            {/* Success Icon */}
+            <div style={{
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #10b981, #059669)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: '0 auto 1.5rem'
+            }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+
+            <h3 style={{
+              color: '#fff',
+              marginBottom: '0.75rem',
+              fontSize: '1.25rem',
+              fontWeight: '600'
+            }}>
+              Email Sent!
+            </h3>
+
+            <p style={{
+              color: '#d1d5db',
+              marginBottom: '0.5rem',
+              fontSize: '0.9rem',
+              lineHeight: '1.5'
+            }}>
+              We've sent a password reset link to <strong style={{ color: '#fff' }}>{resetEmail}</strong>
+            </p>
+
+            {/* Spam Folder Warning */}
+            <div style={{
+              background: 'rgba(251, 191, 36, 0.1)',
+              border: '1px solid rgba(251, 191, 36, 0.3)',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+              marginTop: '1rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '0.75rem',
+              textAlign: 'left'
+            }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <div>
+                <p style={{
+                  color: '#fbbf24',
+                  fontWeight: '600',
+                  fontSize: '0.875rem',
+                  marginBottom: '0.25rem'
+                }}>
+                  Can't find the email?
+                </p>
+                <p style={{
+                  color: '#d1d5db',
+                  fontSize: '0.8rem',
+                  lineHeight: '1.4'
+                }}>
+                  Please check your <strong style={{ color: '#fbbf24' }}>spam</strong> or <strong style={{ color: '#fbbf24' }}>junk</strong> folder. Sometimes the email might end up there.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setShowResetSuccess(false);
+                setResetEmail('');
+              }}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                borderRadius: '0.5rem',
+                border: 'none',
+                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                color: '#fff',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                fontWeight: '500'
+              }}
+            >
+              Got it!
+            </button>
           </div>
         </div>
       )}

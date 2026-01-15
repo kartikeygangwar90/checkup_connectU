@@ -12,6 +12,18 @@ const SOFT_SKILLS = [
     "Time Management", "Creativity", "Adaptability"
 ];
 
+// Research, Hackathon, Startup removed - skills already collected in profile setup
+const EVENT_CATEGORIES = [
+    { id: "sports", name: "Sports", icon: "⚽" },
+    { id: "esports", name: "Esports", icon: "🎮" },
+    { id: "cultural", name: "Cultural", icon: "🎭" },
+];
+
+// Activities separated by category
+const SPORTS_ACTIVITIES = ["Football", "Cricket", "Basketball", "Badminton", "Table Tennis", "Chess", "Volleyball", "Tennis", "Swimming"];
+const ESPORTS_ACTIVITIES = ["Valorant", "BGMI", "FIFA", "COD", "Free Fire", "CS2", "Minecraft", "League of Legends", "Dota 2"];
+const CULTURAL_ACTIVITIES = ["Dance", "Music", "Singing", "Drama", "Art", "Photography", "Content Creation", "Poetry", "Writing"];
+
 const ProfileEditModal = ({
     profileData,
     setProfileData,
@@ -195,6 +207,127 @@ const ProfileEditModal = ({
                         ))}
                     </div>
                 </div>
+
+                {/* Event Categories */}
+                <div style={{ marginBottom: '1.5rem' }}>
+                    <h3 style={{ color: 'white', fontSize: '1rem', marginBottom: '1rem' }}>🏆 Event Categories</h3>
+                    <p style={{ color: '#a1a1aa', fontSize: '0.8rem', marginBottom: '0.75rem' }}>Which types of events interest you?</p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        {EVENT_CATEGORIES.map(cat => (
+                            <button
+                                key={cat.id}
+                                onClick={() => setProfileData(prev => ({
+                                    ...prev,
+                                    categoryInterests: (prev.categoryInterests || []).includes(cat.name)
+                                        ? prev.categoryInterests.filter(c => c !== cat.name)
+                                        : [...(prev.categoryInterests || []), cat.name]
+                                }))}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    background: (profileData.categoryInterests || []).includes(cat.name) ? 'white' : '#27272a',
+                                    color: (profileData.categoryInterests || []).includes(cat.name) ? 'black' : 'white',
+                                    borderRadius: '0.5rem',
+                                    border: '1px solid rgba(255,255,255,0.2)',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem'
+                                }}
+                            >
+                                {cat.icon} {cat.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Activities & Hobbies */}
+                {((profileData.categoryInterests || []).includes("Sports") ||
+                    (profileData.categoryInterests || []).includes("Esports") ||
+                    (profileData.categoryInterests || []).includes("Cultural")) && (
+                        <div style={{ marginBottom: '2rem' }}>
+                            <h3 style={{ color: 'white', fontSize: '1rem', marginBottom: '1rem' }}>⚡ Activities & Hobbies</h3>
+                            <p style={{ color: '#a1a1aa', fontSize: '0.8rem', marginBottom: '0.75rem' }}>Select activities related to your chosen categories</p>
+
+                            {/* Selected Activities */}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                                {(profileData.activities || []).map(activity => (
+                                    <span
+                                        key={activity}
+                                        onClick={() => setProfileData(prev => ({
+                                            ...prev,
+                                            activities: prev.activities.filter(a => a !== activity)
+                                        }))}
+                                        style={{ padding: '0.4rem 0.8rem', background: 'white', color: 'black', borderRadius: '1rem', fontSize: '0.85rem', cursor: 'pointer' }}
+                                    >
+                                        {activity} ✕
+                                    </span>
+                                ))}
+                            </div>
+
+                            {/* Sports Activities */}
+                            {(profileData.categoryInterests || []).includes("Sports") && (
+                                <div style={{ marginBottom: '0.75rem' }}>
+                                    <p style={{ color: '#a1a1aa', fontSize: '0.75rem', marginBottom: '0.5rem' }}>⚽ Sports</p>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                                        {SPORTS_ACTIVITIES.filter(a => !(profileData.activities || []).includes(a)).map(activity => (
+                                            <span
+                                                key={activity}
+                                                onClick={() => setProfileData(prev => ({
+                                                    ...prev,
+                                                    activities: [...(prev.activities || []), activity]
+                                                }))}
+                                                style={{ padding: '0.3rem 0.6rem', background: '#27272a', color: '#a1a1aa', borderRadius: '1rem', fontSize: '0.75rem', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)' }}
+                                            >
+                                                + {activity}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Esports Activities */}
+                            {(profileData.categoryInterests || []).includes("Esports") && (
+                                <div style={{ marginBottom: '0.75rem' }}>
+                                    <p style={{ color: '#a1a1aa', fontSize: '0.75rem', marginBottom: '0.5rem' }}>🎮 Esports</p>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                                        {ESPORTS_ACTIVITIES.filter(a => !(profileData.activities || []).includes(a)).map(activity => (
+                                            <span
+                                                key={activity}
+                                                onClick={() => setProfileData(prev => ({
+                                                    ...prev,
+                                                    activities: [...(prev.activities || []), activity]
+                                                }))}
+                                                style={{ padding: '0.3rem 0.6rem', background: '#27272a', color: '#a1a1aa', borderRadius: '1rem', fontSize: '0.75rem', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)' }}
+                                            >
+                                                + {activity}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Cultural Activities */}
+                            {(profileData.categoryInterests || []).includes("Cultural") && (
+                                <div style={{ marginBottom: '0.75rem' }}>
+                                    <p style={{ color: '#a1a1aa', fontSize: '0.75rem', marginBottom: '0.5rem' }}>🎭 Cultural</p>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                                        {CULTURAL_ACTIVITIES.filter(a => !(profileData.activities || []).includes(a)).map(activity => (
+                                            <span
+                                                key={activity}
+                                                onClick={() => setProfileData(prev => ({
+                                                    ...prev,
+                                                    activities: [...(prev.activities || []), activity]
+                                                }))}
+                                                style={{ padding: '0.3rem 0.6rem', background: '#27272a', color: '#a1a1aa', borderRadius: '1rem', fontSize: '0.75rem', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)' }}
+                                            >
+                                                + {activity}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                 {/* Action Buttons */}
                 <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>

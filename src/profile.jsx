@@ -28,6 +28,8 @@ function ProfileSetup() {
     softSkills: [],
     interests: [],
     generalInterest: [],
+    categoryInterests: [],
+    activities: [],
     experience: "",
     nitpemail: "",
     pemail: "",
@@ -152,6 +154,58 @@ function ProfileSetup() {
     }));
   };
 
+  // Event Category Interests (Research, Hackathon, Startup removed - skills already collected)
+  const eventCategories = [
+    { id: "sports", name: "Sports", icon: "⚽" },
+    { id: "esports", name: "Esports", icon: "🎮" },
+    { id: "cultural", name: "Cultural", icon: "🎭" },
+  ];
+
+  const toggleCategoryInterest = (category) => {
+    setUserData((prev) => ({
+      ...prev,
+      categoryInterests: prev.categoryInterests.includes(category)
+        ? prev.categoryInterests.filter((c) => c !== category)
+        : [...prev.categoryInterests, category],
+    }));
+  };
+
+  // Activities & Hobbies - Separated by category
+  const [activityInput, setActivityInput] = useState("");
+  const sportsActivities = ["Football", "Cricket", "Basketball", "Badminton", "Table Tennis", "Athletics", "Chess", "Volleyball", "Tennis", "Swimming"];
+  const esportsActivities = ["Valorant", "BGMI", "FIFA", "COD", "Free Fire", "CS2", "Minecraft", "League of Legends", "Dota 2", "Rocket League"];
+  const culturalActivities = ["Dance", "Music", "Singing", "Drama", "Art", "Photography", "Content Creation", "Poetry", "Writing", "Painting"];
+
+  // Get activities based on selected categories
+  const getFilteredActivities = () => {
+    let activities = [];
+    if (userData.categoryInterests.includes("Sports")) {
+      activities = [...activities, ...sportsActivities];
+    }
+    if (userData.categoryInterests.includes("Esports")) {
+      activities = [...activities, ...esportsActivities];
+    }
+    if (userData.categoryInterests.includes("Cultural")) {
+      activities = [...activities, ...culturalActivities];
+    }
+    return activities;
+  };
+
+  const toggleActivity = (activity) => {
+    if (!activity.trim()) return;
+    setUserData((prev) => {
+      if (!prev.activities.includes(activity) && prev.activities.length >= 10)
+        return prev;
+      return {
+        ...prev,
+        activities: prev.activities.includes(activity)
+          ? prev.activities.filter((a) => a !== activity)
+          : [...prev.activities, activity],
+      };
+    });
+    setActivityInput("");
+  };
+
   // Availability
   const availability = ["Yes", "No"];
   const toggleAvailability = (value) => {
@@ -198,7 +252,7 @@ function ProfileSetup() {
     userData.experience;
 
   const isStep3Valid =
-    userData.interests.length > 0 && userData.generalInterest.length > 0;
+    userData.interests.length > 0 && userData.generalInterest.length > 0 && userData.categoryInterests.length > 0;
 
   const isStep4Valid =
     userData.roll.trim() &&
@@ -395,6 +449,23 @@ function ProfileSetup() {
             <p className="tag">Select or add skills you can confidently contribute</p>
 
             <div style={{ marginBottom: "1rem" }}>
+              <button
+                className={`suggestion ${userData.technicalSkills.includes("None")
+                  ? "suggestion--clicked"
+                  : ""
+                  }`}
+                onClick={() => {
+                  setUserData(prev => ({
+                    ...prev,
+                    technicalSkills: prev.technicalSkills.includes("None")
+                      ? prev.technicalSkills.filter(s => s !== "None")
+                      : ["None"]
+                  }));
+                }}
+                style={{ marginRight: '0.5rem' }}
+              >
+                None
+              </button>
               {techSkills.map((skill) => (
                 <button
                   key={skill}
@@ -403,6 +474,8 @@ function ProfileSetup() {
                     : ""
                     }`}
                   onClick={() => toggleTechSkills(skill)}
+                  disabled={userData.technicalSkills.includes("None")}
+                  style={{ opacity: userData.technicalSkills.includes("None") ? 0.5 : 1 }}
                 >
                   {skill}
                 </button>
@@ -451,6 +524,23 @@ function ProfileSetup() {
             <p className="tag">Select your interpersonal strengths</p>
 
             <div style={{ marginBottom: "1rem" }}>
+              <button
+                className={`suggestion ${userData.softSkills.includes("None")
+                  ? "suggestion--clicked"
+                  : ""
+                  }`}
+                onClick={() => {
+                  setUserData(prev => ({
+                    ...prev,
+                    softSkills: prev.softSkills.includes("None")
+                      ? prev.softSkills.filter(s => s !== "None")
+                      : ["None"]
+                  }));
+                }}
+                style={{ marginRight: '0.5rem' }}
+              >
+                None
+              </button>
               {softSkills.map((skill) => (
                 <button
                   key={skill}
@@ -459,6 +549,8 @@ function ProfileSetup() {
                     : ""
                     }`}
                   onClick={() => toggleSoftSkills(skill)}
+                  disabled={userData.softSkills.includes("None")}
+                  style={{ opacity: userData.softSkills.includes("None") ? 0.5 : 1 }}
                 >
                   {skill}
                 </button>
@@ -546,6 +638,23 @@ function ProfileSetup() {
             <p className="tag">What kind of projects excite you?</p>
 
             <div className="interest--boxes">
+              <button
+                className={`box--interest ${userData.interests.includes("None")
+                  ? "interest--choosen"
+                  : ""
+                  }`}
+                onClick={() => {
+                  setUserData(prev => ({
+                    ...prev,
+                    interests: prev.interests.includes("None")
+                      ? prev.interests.filter(i => i !== "None")
+                      : ["None"]
+                  }));
+                }}
+                style={{ marginRight: '0.5rem' }}
+              >
+                None
+              </button>
               {mainInterest.map((interest) => (
                 <button
                   key={interest}
@@ -554,6 +663,8 @@ function ProfileSetup() {
                     : ""
                     }`}
                   onClick={() => toggleMainInterest(interest)}
+                  disabled={userData.interests.includes("None")}
+                  style={{ opacity: userData.interests.includes("None") ? 0.5 : 1 }}
                 >
                   {interest}
                 </button>
@@ -570,6 +681,23 @@ function ProfileSetup() {
             <p className="tag skills">What else are you passionate about?</p>
 
             <div className="general--interest--boxes">
+              <button
+                className={`general--interest ${userData.generalInterest.includes("None")
+                  ? "gen--interest--choosen"
+                  : ""
+                  }`}
+                onClick={() => {
+                  setUserData(prev => ({
+                    ...prev,
+                    generalInterest: prev.generalInterest.includes("None")
+                      ? prev.generalInterest.filter(i => i !== "None")
+                      : ["None"]
+                  }));
+                }}
+                style={{ marginRight: '0.5rem' }}
+              >
+                None
+              </button>
               {interests.map((interest) => (
                 <button
                   key={interest}
@@ -578,11 +706,161 @@ function ProfileSetup() {
                     : ""
                     }`}
                   onClick={() => toggleGeneralInterest(interest)}
+                  disabled={userData.generalInterest.includes("None")}
+                  style={{ opacity: userData.generalInterest.includes("None") ? 0.5 : 1 }}
                 >
                   {interest}
                 </button>
               ))}
             </div>
+
+            <h4
+              className="technical--heading"
+              style={{ marginTop: "2rem" }}
+            >
+              Event Categories <span className="required">*</span>
+            </h4>
+            <p className="tag skills">What types of events do you want to participate in?</p>
+
+            <div className="general--interest--boxes" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <button
+                className={`general--interest ${userData.categoryInterests.includes("None")
+                  ? "gen--interest--choosen"
+                  : ""
+                  }`}
+                onClick={() => {
+                  setUserData(prev => ({
+                    ...prev,
+                    categoryInterests: prev.categoryInterests.includes("None")
+                      ? prev.categoryInterests.filter(c => c !== "None")
+                      : ["None"],
+                    activities: [] // Clear activities when None is selected
+                  }));
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              >
+                <span>🚫</span> None
+              </button>
+              {eventCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  className={`general--interest ${userData.categoryInterests.includes(cat.name)
+                    ? "gen--interest--choosen"
+                    : ""
+                    }`}
+                  onClick={() => toggleCategoryInterest(cat.name)}
+                  disabled={userData.categoryInterests.includes("None")}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: userData.categoryInterests.includes("None") ? 0.5 : 1 }}
+                >
+                  <span>{cat.icon}</span> {cat.name}
+                </button>
+              ))}
+            </div>
+
+            {(userData.categoryInterests.includes("Sports") ||
+              userData.categoryInterests.includes("Esports") ||
+              userData.categoryInterests.includes("Cultural")) && (
+                <>
+                  <h4
+                    className="technical--heading"
+                    style={{ marginTop: "2rem" }}
+                  >
+                    Activities & Hobbies
+                  </h4>
+                  <p className="tag skills">Select activities related to your chosen categories</p>
+
+                  {/* Sports Activities */}
+                  {userData.categoryInterests.includes("Sports") && (
+                    <div style={{ marginBottom: "1rem" }}>
+                      <p style={{ color: '#a1a1aa', fontSize: '0.85rem', marginBottom: '0.5rem' }}>⚽ Sports</p>
+                      {sportsActivities
+                        .filter(a => !userData.activities.includes(a))
+                        .map((activity) => (
+                          <button
+                            key={activity}
+                            className="suggestion"
+                            onClick={() => toggleActivity(activity)}
+                          >
+                            {activity}
+                          </button>
+                        ))}
+                    </div>
+                  )}
+
+                  {/* Esports Activities */}
+                  {userData.categoryInterests.includes("Esports") && (
+                    <div style={{ marginBottom: "1rem" }}>
+                      <p style={{ color: '#a1a1aa', fontSize: '0.85rem', marginBottom: '0.5rem' }}>🎮 Esports</p>
+                      {esportsActivities
+                        .filter(a => !userData.activities.includes(a))
+                        .map((activity) => (
+                          <button
+                            key={activity}
+                            className="suggestion"
+                            onClick={() => toggleActivity(activity)}
+                          >
+                            {activity}
+                          </button>
+                        ))}
+                    </div>
+                  )}
+
+                  {/* Cultural Activities */}
+                  {userData.categoryInterests.includes("Cultural") && (
+                    <div style={{ marginBottom: "1rem" }}>
+                      <p style={{ color: '#a1a1aa', fontSize: '0.85rem', marginBottom: '0.5rem' }}>🎭 Cultural</p>
+                      {culturalActivities
+                        .filter(a => !userData.activities.includes(a))
+                        .map((activity) => (
+                          <button
+                            key={activity}
+                            className="suggestion"
+                            onClick={() => toggleActivity(activity)}
+                          >
+                            {activity}
+                          </button>
+                        ))}
+                    </div>
+                  )}
+
+                  <div className="skill--input--area">
+                    <input
+                      type="text"
+                      className="skill--input"
+                      placeholder="Add custom activity..."
+                      value={activityInput}
+                      onChange={(e) => setActivityInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          toggleActivity(activityInput.trim());
+                        }
+                      }}
+                    />
+                    <button
+                      className="add--skill"
+                      onClick={() => toggleActivity(activityInput.trim())}
+                    >
+                      Add
+                    </button>
+                  </div>
+
+                  {userData.activities.length > 0 && (
+                    <div className="skill-choosen">
+                      {userData.activities.map((activity) => (
+                        <span
+                          key={activity}
+                          className="skills"
+                          onClick={() => toggleActivity(activity)}
+                        >
+                          {activity} ✕
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+
 
             <div className="btns--change">
               <button className="previous" onClick={prevStep}>
@@ -802,6 +1080,30 @@ function ProfileSetup() {
                   </li>
                 ))}
               </ul>
+              <p>
+                <strong>Event Categories:</strong>
+              </p>
+              <ul className="gen--interest--setup">
+                {userData.categoryInterests.map((cat) => (
+                  <li key={cat} className="added--genInterest">
+                    {cat}
+                  </li>
+                ))}
+              </ul>
+              {userData.activities.length > 0 && (
+                <>
+                  <p>
+                    <strong>Activities & Hobbies:</strong>
+                  </p>
+                  <ul className="gen--interest--setup">
+                    {userData.activities.map((activity) => (
+                      <li key={activity} className="added--genInterest">
+                        {activity}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </div>
 
             <div className="section section--4">

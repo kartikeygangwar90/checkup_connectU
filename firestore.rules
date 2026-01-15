@@ -16,7 +16,13 @@ service cloud.firestore {
         (!('skills' in request.resource.data) || 
           (request.resource.data.skills is list && request.resource.data.skills.size() <= 20)) &&
         (!('softSkills' in request.resource.data) || 
-          (request.resource.data.softSkills is list && request.resource.data.softSkills.size() <= 20));
+          (request.resource.data.softSkills is list && request.resource.data.softSkills.size() <= 20)) &&
+        // Category interests validation (max 6 categories)
+        (!('categoryInterests' in request.resource.data) || 
+          (request.resource.data.categoryInterests is list && request.resource.data.categoryInterests.size() <= 6)) &&
+        // Activities validation (max 20 activities)
+        (!('activities' in request.resource.data) || 
+          (request.resource.data.activities is list && request.resource.data.activities.size() <= 20));
     }
     
     // Teams collection - authenticated users can read and write

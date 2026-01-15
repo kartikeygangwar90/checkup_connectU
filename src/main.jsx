@@ -11,6 +11,7 @@ import ProfileSetup from "./profile";
 import PrivateRoute from "./privateRoute";
 import Policy from "./Terms&Conditions";
 import Home from "./home";
+import PWAUpdatePrompt from "./components/PWAUpdatePrompt";
 
 // Create QueryClient with default options
 const queryClient = new QueryClient({
@@ -77,6 +78,8 @@ reactDOM.createRoot(document.getElementById("root")).render(
                 },
               }}
             />
+            {/* PWA Update Prompt */}
+            <PWAUpdatePrompt />
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<Access />} />

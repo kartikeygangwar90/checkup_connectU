@@ -25,35 +25,68 @@ const ForYou = () => {
         ];
     }, [userProfile]);
 
+    const userActivities = useMemo(() => {
+        if (!userProfile) return [];
+        return userProfile.activities || [];
+    }, [userProfile]);
+
     const forYouTeams = useMemo(() => {
         if (!userProfile) return [];
 
-        // Helper function defined inside useMemo to avoid dependency issues
-        const calculateMatch = (userSkills, teamSkills, userInterests = [], teamEvent = "") => {
-            if (!teamSkills || teamSkills.length === 0) return 50;
-            let skillScore = 0;
-            if (teamSkills?.length) {
-                const user = userSkills.map(normalizeSkill);
-                const team = teamSkills.map(normalizeSkill);
-                skillScore = (team.filter((s) => user.includes(s)).length / team.length) * 70;
+        const NON_TECHNICAL_CATEGORIES = ["sports", "esports", "cultural"];
+
+        // Helper function for category-aware matching
+        const calculateMatch = (team) => {
+            const teamCategory = (team.category || "").toLowerCase();
+            const isNonTechnical = NON_TECHNICAL_CATEGORIES.includes(teamCategory);
+            const teamSkills = team.skills || [];
+            const userCategoryInterests = (userProfile.categoryInterests || []).map(c => c.toLowerCase());
+
+            // Base score starts at 0
+            let totalScore = 0;
+
+            // Category Interest Boost (20 points if user has this category in interests)
+            if (userCategoryInterests.includes(teamCategory)) {
+                totalScore += 20;
             }
-            let InterestScore = userInterests.some((i) => teamEvent?.toLowerCase().includes(i.toLowerCase())) ? 30 : 0;
-            return Math.round(skillScore + InterestScore);
+
+            // Skill/Activity Matching (50 points max)
+            if (teamSkills.length > 0) {
+                let relevantUserSkills;
+
+                if (isNonTechnical) {
+                    // For Sports/Esports/Cultural - use activities
+                    relevantUserSkills = userActivities.map(normalizeSkill);
+                } else {
+                    // For Research/Hackathon/Startup - use technical skills
+                    relevantUserSkills = userSkills.map(normalizeSkill);
+                }
+
+                const teamSkillsNormalized = teamSkills.map(normalizeSkill);
+                const matchedSkills = teamSkillsNormalized.filter(s => relevantUserSkills.includes(s));
+                totalScore += (matchedSkills.length / teamSkills.length) * 50;
+            } else {
+                // If team has no specific skills, give partial score
+                totalScore += 25;
+            }
+
+            // Interest Match Boost (30 points if event name matches user interests)
+            const userInterests = userProfile.interests || [];
+            if (userInterests.some((i) => team.eventName?.toLowerCase().includes(i.toLowerCase()))) {
+                totalScore += 30;
+            }
+
+            return Math.round(totalScore);
         };
 
         return teams
             .map((team) => ({
                 ...team,
-                matchPercent: calculateMatch(
-                    userSkills,
-                    team.skills,
-                    userProfile.interests,
-                    team.eventName
-                ),
+                matchPercent: calculateMatch(team),
             }))
             .filter((team) => team.matchPercent >= 20)
             .sort((a, b) => b.matchPercent - a.matchPercent);
-    }, [teams, userSkills, userProfile]);
+    }, [teams, userSkills, userActivities, userProfile]);
 
     const handleJoinRequest = async () => {
         if (!selectedTeam) return;

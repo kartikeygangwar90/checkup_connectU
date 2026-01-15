@@ -4,6 +4,7 @@ import { doc, getDoc, collection, query, where, getDocs, orderBy, onSnapshot } f
 import { auth, dataBase } from "../../firebase";
 import { TeamContext } from "../../context/TeamContext";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../../style.css"; // Reuse existing styles
 
 const DashboardLayout = () => {
@@ -249,6 +250,9 @@ const DashboardLayout = () => {
 
             {/* Child Pages */}
             <Outlet context={{ userProfile, allUsers, teams, events, searchQuery, searchBySkill }} />
+
+            {/* Footer */}
+            <Footer />
         </div>
     );
 };

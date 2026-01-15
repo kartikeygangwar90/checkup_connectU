@@ -15,6 +15,11 @@ const CATEGORIES = [
     { id: "cultural", name: "Cultural" },
 ];
 
+// Activity lists by category
+const SPORTS_ACTIVITIES = ["Football", "Cricket", "Basketball", "Badminton", "Table Tennis", "Athletics", "Chess", "Volleyball", "Tennis", "Swimming"];
+const ESPORTS_ACTIVITIES = ["Valorant", "BGMI", "FIFA", "COD", "Free Fire", "CS2", "Minecraft", "League of Legends", "Dota 2", "Rocket League"];
+const CULTURAL_ACTIVITIES = ["Dance", "Music", "Singing", "Drama", "Art", "Photography", "Content Creation", "Poetry", "Writing", "Painting"];
+
 const Teams = () => {
     const { teams, events, userProfile, allUsers } = useOutletContext();
     const { addTeam } = useContext(TeamContext);
@@ -36,6 +41,19 @@ const Teams = () => {
     const [eventUrl, setEventUrl] = useState("");
     const [isNewEvent, setIsNewEvent] = useState(true);
     const [skillInput, setSkillInput] = useState("");
+    const [requiredActivities, setRequiredActivities] = useState([]);
+    const [expandedActivitySection, setExpandedActivitySection] = useState(null); // 'sports', 'esports', 'cultural'
+    const [showEventSuggestions, setShowEventSuggestions] = useState(false);
+
+    // Toggle activity for team requirements
+    const toggleActivity = (activity) => {
+        if (!activity.trim()) return;
+        setRequiredActivities(prev => {
+            if (prev.includes(activity)) return prev.filter(a => a !== activity);
+            if (prev.length >= 5) return prev;
+            return [...prev, activity];
+        });
+    };
 
     const [openJoinModel, setOpenJoinModel] = useState(false);
     const [selectedTeam, setSelectedTeam] = useState(null);
@@ -84,7 +102,6 @@ const Teams = () => {
         if (isNewEvent) {
             if (!eventCategory) { toast.error("Please select a category"); return; }
             if (!eventDeadline) { toast.error("Please set an event deadline"); return; }
-            if (!eventUrl) { toast.error("Please provide an event URL"); return; }
 
             const today = new Date();
             today.setHours(0, 0, 0, 0); // Normalize to midnight
@@ -103,6 +120,7 @@ const Teams = () => {
             teamDesc: newTeamDesc,
             teamSize: newTeamSize,
             skills: newTeamSkills,
+            requiredActivities: requiredActivities,
             leader: newTeamLeader,
             eventName: eventInputName,
             category: eventCategory
@@ -121,7 +139,7 @@ const Teams = () => {
             toast.success("Team created successfully! 🎉");
             setTeamChoice(false);
             setNewTeamName(""); setNewTeamDesc(""); setNewTeamSize("");
-            setNewTeamSkills([]); setNewTeamLeader(""); setEventInputName("");
+            setNewTeamSkills([]); setRequiredActivities([]); setNewTeamLeader(""); setEventInputName("");
             setEventCategory(""); setEventDeadline(""); setEventUrl("");
             setIsNewEvent(true);
         } else {
@@ -301,10 +319,92 @@ const Teams = () => {
                 // CREATE TEAM FORM
                 <div className="create--block">
                     <h2>Create a New Team</h2>
-                    <div className="eventName">
+                    <div className="eventName" style={{ position: 'relative' }}>
                         <h2 className="create--heading">Event Name <span className="required">*</span></h2>
                         <input type="text" className="input--eventname" placeholder="Enter Event Name"
-                            value={eventInputName} onChange={(e) => handleEventNameChange(e.target.value)} />
+                            value={eventInputName}
+                            onChange={(e) => {
+                                handleEventNameChange(e.target.value);
+                                setShowEventSuggestions(true);
+                            }}
+                            onFocus={() => setShowEventSuggestions(true)}
+                            onBlur={() => {
+                                // Delay hiding to allow click on suggestion
+                                setTimeout(() => setShowEventSuggestions(false), 200);
+                            }}
+                        />
+
+                        {/* Event Suggestions Dropdown */}
+                        {showEventSuggestions && eventInputName.length > 0 && (
+                            (() => {
+                                const matchingEvents = events.filter(e =>
+                                    e.name.toLowerCase().includes(eventInputName.toLowerCase()) &&
+                                    e.name.toLowerCase() !== eventInputName.toLowerCase()
+                                );
+
+                                if (matchingEvents.length === 0) return null;
+
+                                return (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '100%',
+                                        left: 0,
+                                        right: 0,
+                                        background: '#1a1a1a',
+                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                        borderRadius: '0.5rem',
+                                        marginTop: '0.25rem',
+                                        maxHeight: '200px',
+                                        overflowY: 'auto',
+                                        zIndex: 100,
+                                        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)'
+                                    }}>
+                                        <p style={{
+                                            padding: '0.5rem 1rem',
+                                            fontSize: '0.75rem',
+                                            color: '#6b7280',
+                                            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                                            margin: 0
+                                        }}>
+                                            Existing events matching your search:
+                                        </p>
+                                        {matchingEvents.slice(0, 5).map((event, idx) => (
+                                            <div
+                                                key={event.name + idx}
+                                                onClick={() => {
+                                                    handleEventNameChange(event.name);
+                                                    setShowEventSuggestions(false);
+                                                }}
+                                                style={{
+                                                    padding: '0.75rem 1rem',
+                                                    cursor: 'pointer',
+                                                    borderBottom: idx < matchingEvents.slice(0, 5).length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+                                                    transition: 'background 0.2s'
+                                                }}
+                                                onMouseOver={(e) => e.currentTarget.style.background = '#27272a'}
+                                                onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                                            >
+                                                <p style={{
+                                                    margin: 0,
+                                                    fontWeight: '600',
+                                                    color: 'white',
+                                                    fontSize: '0.95rem'
+                                                }}>
+                                                    {event.name}
+                                                </p>
+                                                <p style={{
+                                                    margin: '0.25rem 0 0 0',
+                                                    fontSize: '0.8rem',
+                                                    color: '#9ca3af'
+                                                }}>
+                                                    {event.category} • Deadline: {event.deadline || 'N/A'}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })()
+                        )}
                     </div>
 
                     {isNewEvent && (
@@ -346,8 +446,8 @@ const Teams = () => {
                                     fontSize: '1.2rem'
                                 }}>📅</span>
                             </div>
-                            <h2 className="create--heading">Event URL <span className="required">*</span></h2>
-                            <input type="url" className="input--teamname" placeholder="https://..." value={eventUrl} onChange={(e) => setEventUrl(e.target.value)} />
+                            <h2 className="create--heading">Event URL <span style={{ fontWeight: 'normal', color: '#a1a1aa' }}>(Optional)</span></h2>
+                            <input type="url" className="input--teamname" placeholder="https://... (optional)" value={eventUrl} onChange={(e) => setEventUrl(e.target.value)} />
                         </div>
                     )}
 
@@ -356,7 +456,7 @@ const Teams = () => {
                     <div className="teamSize"><h2 className="create--heading">Team Size <span className="required">*</span></h2>
                         <select className="input--teamSize" value={newTeamSize} onChange={(e) => setNewTeamSize(e.target.value)}>
                             <option value="">Select size</option>
-                            {[2, 3, 4, 5, 6].map(n => <option key={n} value={n}>{n} members</option>)}
+                            {[2, 3, 4, 5, 6, 8, 10].map(n => <option key={n} value={n}>{n} members</option>)}
                         </select>
                     </div>
 
@@ -394,6 +494,152 @@ const Teams = () => {
                             }
                         </div>
                     </div>
+
+                    {/* Required Activities - Collapsible sections */}
+                    <div className="teamActivities" style={{ marginTop: '1.5rem' }}>
+                        <h2 className="create--heading">🎮 Required Activities <span style={{ fontWeight: 'normal', color: '#a1a1aa' }}>(Optional)</span></h2>
+                        <p style={{ fontSize: '0.85rem', color: '#a1a1aa', marginBottom: '0.75rem' }}>Click a category to select activities</p>
+
+                        {/* Selected Activities */}
+                        {requiredActivities.length > 0 && (
+                            <div className="activities--chosen" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                                {requiredActivities.map(a => (
+                                    <span key={a} onClick={() => toggleActivity(a)} style={{
+                                        background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                                        padding: '0.3rem 0.8rem',
+                                        borderRadius: '1rem',
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        color: 'white'
+                                    }}>
+                                        {a} ✕
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Category Buttons */}
+                        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+                            <button
+                                type="button"
+                                onClick={() => setExpandedActivitySection(expandedActivitySection === 'sports' ? null : 'sports')}
+                                style={{
+                                    padding: '0.6rem 1.2rem',
+                                    background: expandedActivitySection === 'sports' ? '#22c55e' : '#27272a',
+                                    color: 'white',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    borderRadius: '0.5rem',
+                                    cursor: 'pointer',
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.3rem'
+                                }}
+                            >
+                                ⚽ Sports {expandedActivitySection === 'sports' ? '▼' : '▶'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setExpandedActivitySection(expandedActivitySection === 'esports' ? null : 'esports')}
+                                style={{
+                                    padding: '0.6rem 1.2rem',
+                                    background: expandedActivitySection === 'esports' ? '#8b5cf6' : '#27272a',
+                                    color: 'white',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    borderRadius: '0.5rem',
+                                    cursor: 'pointer',
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.3rem'
+                                }}
+                            >
+                                🎮 Esports {expandedActivitySection === 'esports' ? '▼' : '▶'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setExpandedActivitySection(expandedActivitySection === 'cultural' ? null : 'cultural')}
+                                style={{
+                                    padding: '0.6rem 1.2rem',
+                                    background: expandedActivitySection === 'cultural' ? '#f59e0b' : '#27272a',
+                                    color: 'white',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    borderRadius: '0.5rem',
+                                    cursor: 'pointer',
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.3rem'
+                                }}
+                            >
+                                🎭 Cultural {expandedActivitySection === 'cultural' ? '▼' : '▶'}
+                            </button>
+                        </div>
+
+                        {/* Sports Activities - Collapsible */}
+                        {expandedActivitySection === 'sports' && (
+                            <div style={{ marginBottom: '0.75rem', padding: '0.75rem', background: '#1a1a1a', borderRadius: '0.5rem', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    {SPORTS_ACTIVITIES.filter(a => !requiredActivities.includes(a)).map(a => (
+                                        <span key={a} onClick={() => toggleActivity(a)} style={{
+                                            background: '#27272a',
+                                            padding: '0.3rem 0.8rem',
+                                            borderRadius: '1rem',
+                                            fontSize: '0.85rem',
+                                            cursor: 'pointer',
+                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            color: 'white'
+                                        }}>
+                                            + {a}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Esports Activities - Collapsible */}
+                        {expandedActivitySection === 'esports' && (
+                            <div style={{ marginBottom: '0.75rem', padding: '0.75rem', background: '#1a1a1a', borderRadius: '0.5rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    {ESPORTS_ACTIVITIES.filter(a => !requiredActivities.includes(a)).map(a => (
+                                        <span key={a} onClick={() => toggleActivity(a)} style={{
+                                            background: '#27272a',
+                                            padding: '0.3rem 0.8rem',
+                                            borderRadius: '1rem',
+                                            fontSize: '0.85rem',
+                                            cursor: 'pointer',
+                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            color: 'white'
+                                        }}>
+                                            + {a}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Cultural Activities - Collapsible */}
+                        {expandedActivitySection === 'cultural' && (
+                            <div style={{ marginBottom: '0.75rem', padding: '0.75rem', background: '#1a1a1a', borderRadius: '0.5rem', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    {CULTURAL_ACTIVITIES.filter(a => !requiredActivities.includes(a)).map(a => (
+                                        <span key={a} onClick={() => toggleActivity(a)} style={{
+                                            background: '#27272a',
+                                            padding: '0.3rem 0.8rem',
+                                            borderRadius: '1rem',
+                                            fontSize: '0.85rem',
+                                            cursor: 'pointer',
+                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            color: 'white'
+                                        }}>
+                                            + {a}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="teamLeader"><h2 className="create--heading">Leader Name</h2><input type="text" className="input--leader" value={newTeamLeader} onChange={(e) => setNewTeamLeader(e.target.value)} /></div>
 
                     <div className="team--submission">
@@ -459,8 +705,9 @@ const Teams = () => {
                         </div>
                     )}
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 

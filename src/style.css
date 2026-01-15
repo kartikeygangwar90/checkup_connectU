@@ -176,6 +176,7 @@
   }
 }
 
+
 /* Logout Button Base Styles */
 .logout-btn {
   padding: 0.5rem 1rem;
@@ -4986,5 +4987,34 @@ select:focus {
 
   .toast {
     max-width: 100%;
+  }
+}
+
+/* Home Page Mobile Navbar Adjustments */
+@media (max-width: 768px) {
+  .connectU--m .main--logo {
+    height: 28px;
+  }
+
+  .connectU--m .btn--home,
+  .connectU--m .btn--howItWorks {
+    padding: 0.4rem 0.5rem;
+    margin-left: 0.2rem;
+    font-size: 0.75rem;
+  }
+
+  .connectU--m .logout-text {
+    display: none;
+  }
+
+  .connectU--m .logout-icon {
+    display: inline-flex !important;
+  }
+
+  .connectU--m .logout-btn-home {
+    padding: 0.4rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
   }
 }

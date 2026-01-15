@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
         name: 'ConnectU - Find Your Team',
@@ -37,8 +37,29 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
+        // CRITICAL: Do NOT precache HTML - always fetch from network
+        globPatterns: ['**/*.{js,css,ico,png,svg,webp}'],
+        // Force new service worker to take control immediately
+        skipWaiting: true,
+        clientsClaim: true,
+        // Clean old caches
+        cleanupOutdatedCaches: true,
+        // Navigation requests (HTML pages) should ALWAYS go to network first
+        navigateFallback: null,
         runtimeCaching: [
+          {
+            // HTML/Navigation requests - ALWAYS network first
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-cache',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 // 1 hour
+              }
+            }
+          },
           {
             urlPattern: /^https:\/\/firestore\.googleapis\.com/,
             handler: 'NetworkFirst',
@@ -46,7 +67,7 @@ export default defineConfig({
               cacheName: 'firestore-cache',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
+                maxAgeSeconds: 60 * 60 // 1 hour
               }
             }
           },

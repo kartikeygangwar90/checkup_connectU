@@ -141,6 +141,27 @@ const DiscoverTalent = () => {
                                 </div>
                             </div>
 
+                            {/* Activities (Sports, Esports, Cultural) */}
+                            {user.activities && user.activities.length > 0 && user.activities[0] !== "None" && (
+                                <div className="user-card-activities">
+                                    <p style={{ fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '0.5rem' }}>🎯 Activities:</p>
+                                    <div className="activities-wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                        {user.activities?.slice(0, 4).map((activity, i) => (
+                                            <span key={i} style={{
+                                                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                                                padding: '0.25rem 0.5rem',
+                                                borderRadius: '0.4rem',
+                                                fontSize: '0.85rem',
+                                                color: 'white'
+                                            }}>
+                                                {activity}
+                                            </span>
+                                        ))}
+                                        {user.activities?.length > 4 && <span style={{ fontSize: '0.85rem', color: '#a1a1aa' }}>+{user.activities.length - 4}</span>}
+                                    </div>
+                                </div>
+                            )}
+
                             <div style={{ marginTop: 'auto', display: 'flex', gap: '0.5rem' }}>
                                 {user.pemail && (
                                     <a href={`mailto:${user.pemail}`} style={{
