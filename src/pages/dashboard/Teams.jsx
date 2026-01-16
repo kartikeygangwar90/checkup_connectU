@@ -892,12 +892,29 @@ const Teams = () => {
                             <p style={{ color: '#a1a1aa', fontSize: '0.9rem', marginBottom: '0.5rem' }}>📝 Description</p>
                             <p style={{ color: 'white', marginBottom: '1rem', lineHeight: '1.5' }}>{directJoinTeam.teamDesc}</p>
 
-                            <p style={{ color: '#a1a1aa', fontSize: '0.9rem', marginBottom: '0.5rem' }}>👥 Current Members</p>
-                            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                {/* Just showing count for simplicity, names avail via context if needed */}
-                                <span style={{ color: 'white', fontSize: '0.95rem' }}>
-                                    {directJoinTeam.members?.length || 1} / {directJoinTeam.teamSize} members
-                                </span>
+                            <p style={{ color: '#a1a1aa', fontSize: '0.9rem', marginBottom: '0.5rem' }}>👥 Current Members ({directJoinTeam.members?.length || 1}/{directJoinTeam.teamSize})</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '150px', overflowY: 'auto' }}>
+                                {allUsers && directJoinTeam.members ? (
+                                    allUsers
+                                        .filter(u => directJoinTeam.members.includes(u.id))
+                                        .map(u => (
+                                            <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', background: '#27272a', borderRadius: '0.5rem' }}>
+                                                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.8rem' }}>
+                                                    {u.fullName?.[0] || '?'}
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    <p style={{ fontWeight: '500', color: 'white', fontSize: '0.9rem', margin: 0 }}>
+                                                        {u.fullName} {u.id === directJoinTeam.createdBy && '👑'}
+                                                    </p>
+                                                    <p style={{ fontSize: '0.75rem', color: '#a1a1aa', margin: 0 }}>{u.branch} • {u.year}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                ) : (
+                                    <span style={{ color: 'white', fontSize: '0.95rem' }}>
+                                        {directJoinTeam.members?.length || 1} members
+                                    </span>
+                                )}
                             </div>
                         </div>
 
