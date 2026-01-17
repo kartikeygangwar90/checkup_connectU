@@ -877,7 +877,7 @@ const Teams = () => {
                         boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
                     }}>
                         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🚀</div>
-                        <h2 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'white', marginBottom: '0.5rem' }}>You've been invited!</h2>
+                        <h2 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'white', marginBottom: '0.5rem' }}>You're Invited!</h2>
                         <p style={{ color: '#a1a1aa', fontSize: '1.1rem', marginBottom: '2rem' }}>
                             You are about to join <strong style={{ color: 'white' }}>{directJoinTeam.teamName}</strong> for <strong style={{ color: '#60a5fa' }}>{directJoinTeam.eventName}</strong>.
                         </p>
@@ -892,30 +892,56 @@ const Teams = () => {
                             <p style={{ color: '#a1a1aa', fontSize: '0.9rem', marginBottom: '0.5rem' }}>📝 Description</p>
                             <p style={{ color: 'white', marginBottom: '1rem', lineHeight: '1.5' }}>{directJoinTeam.teamDesc}</p>
 
-                            <p style={{ color: '#a1a1aa', fontSize: '0.9rem', marginBottom: '0.5rem' }}>👥 Current Members ({directJoinTeam.members?.length || 1}/{directJoinTeam.teamSize})</p>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '150px', overflowY: 'auto' }}>
-                                {allUsers && directJoinTeam.members ? (
-                                    allUsers
-                                        .filter(u => directJoinTeam.members.includes(u.id))
-                                        .map(u => (
-                                            <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', background: '#27272a', borderRadius: '0.5rem' }}>
-                                                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.8rem' }}>
-                                                    {u.fullName?.[0] || '?'}
-                                                </div>
-                                                <div style={{ flex: 1 }}>
-                                                    <p style={{ fontWeight: '500', color: 'white', fontSize: '0.9rem', margin: 0 }}>
-                                                        {u.fullName} {u.id === directJoinTeam.createdBy && '👑'}
-                                                    </p>
-                                                    <p style={{ fontSize: '0.75rem', color: '#a1a1aa', margin: 0 }}>{u.branch} • {u.year}</p>
-                                                </div>
-                                            </div>
-                                        ))
-                                ) : (
-                                    <span style={{ color: 'white', fontSize: '0.95rem' }}>
-                                        {directJoinTeam.members?.length || 1} members
-                                    </span>
-                                )}
-                            </div>
+                            {((() => {
+                                // Calculate valid members to display
+                                const displayedMembers = [];
+
+                                // 1. Add other users from allUsers
+                                if (allUsers && directJoinTeam.members) {
+                                    const others = allUsers.filter(u => directJoinTeam.members.includes(u.id));
+                                    displayedMembers.push(...others);
+                                }
+
+                                // 2. Add current user if they are in the team (since allUsers excludes current user)
+                                if (userProfile && auth.currentUser && directJoinTeam.members?.includes(auth.currentUser.uid)) {
+                                    // Check if not already added (just in case)
+                                    if (!displayedMembers.find(u => u.id === auth.currentUser.uid)) {
+                                        displayedMembers.push({
+                                            id: auth.currentUser.uid,
+                                            ...userProfile
+                                        });
+                                    }
+                                }
+
+                                return (
+                                    <>
+                                        <p style={{ color: '#a1a1aa', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+                                            👥 Current Members ({displayedMembers.length}/{directJoinTeam.teamSize})
+                                        </p>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '150px', overflowY: 'auto' }}>
+                                            {displayedMembers.length > 0 ? (
+                                                displayedMembers.map(u => (
+                                                    <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', background: '#27272a', borderRadius: '0.5rem' }}>
+                                                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.8rem' }}>
+                                                            {u.fullName?.[0] || '?'}
+                                                        </div>
+                                                        <div style={{ flex: 1 }}>
+                                                            <p style={{ fontWeight: '500', color: 'white', fontSize: '0.9rem', margin: 0 }}>
+                                                                {u.fullName} {u.id === directJoinTeam.createdBy && '👑'} {u.id === auth.currentUser?.uid && '(You)'}
+                                                            </p>
+                                                            <p style={{ fontSize: '0.75rem', color: '#a1a1aa', margin: 0 }}>{u.branch} • {u.year}</p>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <span style={{ color: 'white', fontSize: '0.95rem' }}>
+                                                    {directJoinTeam.members?.length > 0 ? "Loading member details..." : "No members yet"}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </>
+                                );
+                            })())}
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
