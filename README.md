@@ -92,7 +92,7 @@ src/
 ## Contributors 👥
 
 - **Shivam Singh**
-- **Kartikey**
+- **Kartikey Gangwar**
 
 ---
 Built with ❤️ for NIT Patna.
