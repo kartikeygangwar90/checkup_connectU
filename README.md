@@ -2,6 +2,8 @@
 
 ConnectU is a dedicated platform for college students (specifically NIT Patna) to find teammates, join events, and showcase their skills. It bridges the gap between students looking to participate in hackathons, sports, or cultural events and teams looking for the right talent.
 
+##**MVP link** - https://connectu-nitp.web.app/
+
 ## Key Features ✨
 
 ### 🔐 Authentication & Security
